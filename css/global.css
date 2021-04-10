@@ -1,3 +1,8 @@
 /*
 	Global stylesheet
 */
+
+.center-all {
+	justify-content: center;
+	align-items: center;
+}

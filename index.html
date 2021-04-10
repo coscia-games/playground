@@ -10,6 +10,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous" />
   <!-- Bootstrap - CSS only -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
@@ -23,109 +27,89 @@
   <link rel="stylesheet" href="main.css" />
 </head>
 
-<body>
-  <div id="main">
-    <!-- Header -->
-    <header>
-      <h1>Coscia Creations</h1>
-    </header>
+<body class="wrapper">
+  <div class="container">
+    <!-- HEADER -->
+    <div class="row center-all">
+      <div class="col-1">
+        <img src="android-chrome-512x512.png" alt="logo" />
+      </div>
+      <div class="col-11">
+        <header>
+          <h1>Coscia Creations</h1>
+        </header>
+      </div>
+    </div>
 
-    <!-- Break -->
     <hr />
 
-    <!-- Projects -->
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <!-- Info -->
-          <p>Games!</p>
+    <!-- CONTENT -->
+    <div class="row">
+      <div class="col">
+        <!-- Info -->
+        <header style="margin-bottom: 1rem;">
+          <h2>Games!</h2>
+        </header>
 
-          <!-- Content -->
-          <div class="grid">
-            <!-- Row 1 -->
-            <div class="grid-row">
-              <!-- Snake -->
-              <div class="card">
-                <div class="card-header">
-                  <h2 style="display: inline">
-                    <strong>Snake</strong>
-                  </h2>
-                  &nbsp;
-                  <a href="/sections/fun/games/snake/index.html" target="_blank">
-                    <span class="icon solid fa-play"></span>
-                  </a>
-                </div>
-                <div class="card-body">
-                  <img src="/assets/img/fun/games/snake.png" alt="Snake"
-                    onclick="window.location = '/sections/fun/games/snake/index.html'" style="cursor: pointer" />
-                </div>
-              </div>
-
-              <!-- Platformer -->
-              <div class="column">
-                <div class="row flex-nowrap">
-                  <div class="column teaser">
-                    <img src="/assets/img/fun/games/platformer.png" alt="Platformer"
-                      onclick="window.location = '/sections/fun/games/platformer/index.html'" style="cursor: pointer" />
-                  </div>
-                  <div class="column title">
-                    <div class="text-nowrap">
-                      <h2 style="display: inline">
-                        <strong>Platformer</strong>
-                      </h2>
-                      &nbsp;
-                      <a href="/sections/fun/games/platformer/index.html" target="_blank">
-                        <span class="icon solid fa-play"></span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <!-- Content -->
+        <div class="grid">
+          <!-- Snake -->
+          <div class="card">
+            <div class="card-header">
+              <strong>Snake</strong>
+              &nbsp;
+              <a href="/games/snake/index.html" target="_blank">
+                <span class="fa fa-play" style="color: seagreen"></span>
+              </a>
             </div>
+            <div class="card-body">
+              <img src="/assets/splash/games/snake.png" alt="snake" style="cursor: pointer"
+                onclick="window.location = '/games/snake/index.html'" />
+            </div>
+          </div>
 
-            <!-- Row 2 -->
-            <div class="row">
-              <!-- Side Scroller -->
-              <div class="column">
-                <div class="row flex-nowrap">
-                  <div class="column teaser">
-                    <img src="/assets/img/fun/games/scroller.png" alt="Side Scroller"
-                      onclick="window.location = '/sections/fun/games/scroller/index.html'" style="cursor: pointer" />
-                  </div>
-                  <div class="column title">
-                    <div class="text-nowrap">
-                      <h2 style="display: inline">
-                        <strong>2D Side Scroller</strong>
-                      </h2>
-                      &nbsp;
-                      <a href="/sections/fun/games/scroller/index.html" target="_blank">
-                        <span class="icon solid fa-play"></span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <!-- Platformer -->
+          <div class="card">
+            <div class="card-header">
+              <strong>Platformer</strong>
+              &nbsp;
+              <a href="/games/platformer/index.html" target="_blank">
+                <span class="fa fa-play" style="color: seagreen"></span>
+              </a>
+            </div>
+            <div class="card-body">
+              <img src="/assets/splash/games/platformer.png" alt="platformer" style="cursor: pointer"
+                onclick="window.location = '/games/platformer/index.html'" />
+            </div>
+          </div>
 
-              <!-- Clock -->
-              <div class="column">
-                <div class="row flex-nowrap">
-                  <div class="column teaser">
-                    <img src="/assets/img/fun/demos/clock.png" alt="Analog Clock"
-                      onclick="window.location = '/sections/fun/demos/clock/index.html'" style="cursor: pointer" />
-                  </div>
-                  <div class="column title">
-                    <div class="text-nowrap">
-                      <h2 style="display: inline">
-                        <strong>Analog Clock</strong>
-                      </h2>
-                      &nbsp;
-                      <a href="/sections/fun/demos/clock/index.html" target="_blank">
-                        <span class="icon solid fa-play"></span>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <!-- 2D Side-Scroller -->
+          <div class="card">
+            <div class="card-header">
+              <strong>2D Side-Scroller</strong>
+              &nbsp;
+              <a href="/games/scroller/index.html" target="_blank">
+                <span class="fa fa-play" style="color: seagreen"></span>
+              </a>
+            </div>
+            <div class="card-body">
+              <img src="/assets/splash/games/scroller.png" alt="scroller" style="cursor: pointer"
+                onclick="window.location = '/games/scroller/index.html'" />
+            </div>
+          </div>
+
+          <!-- Analog Clock -->
+          <div class="card">
+            <div class="card-header">
+              <strong>Analog Clock</strong>
+              &nbsp;
+              <a href="/demos/clock/index.html" target="_blank">
+                <span class="fa fa-play" style="color: seagreen"></span>
+              </a>
+            </div>
+            <div class="card-body">
+              <img src="/assets/splash/demos/clock.png" alt="clock" style="cursor: pointer"
+                onclick="window.location = '/demos/clock/index.html'" />
             </div>
           </div>
         </div>
