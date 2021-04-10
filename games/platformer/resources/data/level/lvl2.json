@@ -1,0 +1,20 @@
+{
+  "player": {
+    "x": 550,
+    "y": 430,
+    "vx": 0,
+    "vy": 0,
+    "w": 10,
+    "h": 20,
+    "facing": "left"
+  },
+  "platforms": [
+    {
+      "x": 535,
+      "y": 430,
+      "w": 30,
+      "h": 20
+    }
+  ],
+  "goalPlatformNumber": 2
+}

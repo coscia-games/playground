@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title id="title">Adam Coscia - Snake</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
+  <script type="text/javascript" src="main.js" defer></script>
+</head>
+
+<body style="touch-action: manipulation">
+  <div class="flex row">
+    <!-- Instructions -->
+    <div class="flex column center-text" style="min-width: 100px">
+      <h1 class="header">Snake</h1>
+
+      <table class="stateButtons">
+        <tbody>
+          <tr>
+            <td>
+              <button id="stateButton" onclick="startGame()">Play!</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="difficulty">
+        <tbody>
+          <tr>
+            <td style="float: left">Difficulty</td>
+            <td style="float: right">
+              <span id="difficultyOutput">Normal</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="slidecontainer">
+        <input type="range" min="1" max="3" value="1" class="slider" id="difficultySlider" />
+      </div>
+
+      <p class="info">
+        Press spacebar to pause.
+        <br />
+        Move by pressing the below arrows
+        <br />
+        or using your keyboard arrow keys!
+      </p>
+
+      <table class="keypad">
+        <tbody>
+          <tr>
+            <td style="background-color: white; cursor: default; border: none"></td>
+            <td id="uparrow">&#x21e7;</td>
+            <td style="background-color: white; cursor: default; border: none"></td>
+          </tr>
+          <tr>
+            <td id="leftarrow">&#x21e6;</td>
+            <td id="downarrow">&#x21e9;</td>
+            <td id="rightarrow">&#x21e8;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Game -->
+    <div class="flex column" style="min-width: 200px">
+      <canvas id="board"></canvas>
+
+      <table class="scoreboard center-text">
+        <tbody>
+          <tr>
+            <td>Apples Eaten: <span id="scoreOutput">0 </span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>

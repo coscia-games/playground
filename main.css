@@ -1,0 +1,23 @@
+.info p {
+  font-size: 11pt;
+  text-transform: none;
+  letter-spacing: 0.1em;
+}
+
+/* CARDS */
+
+.teaser {
+  min-width: 135px;
+}
+
+.teaser img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.title {
+  font-size: 11pt;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 1em;
+}
