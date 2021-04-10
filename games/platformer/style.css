@@ -1,0 +1,140 @@
+#board {
+  margin: auto;
+  display: block;
+}
+
+.flex {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.row {
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.column {
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  margin: 0 8px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.header {
+  font-family: "Press Start 2P", cursive;
+}
+
+.keypad {
+  width: 90%;
+  padding-left: 10%;
+}
+
+.keypad td {
+  font-family: "Press Start 2P", cursive;
+  font-size: 2em;
+  cursor: pointer;
+  width: 30%;
+  height: 0;
+  border: 1px solid black;
+}
+
+.keypad td:after,
+.keypad td:before {
+  content: "";
+  display: block;
+  padding-bottom: calc(50% - 0.5em);
+}
+
+.keypad td:hover {
+  background-color: gainsboro;
+}
+
+.keypad td:active {
+  background-color: grey;
+}
+
+.info {
+  font-family: "Quicksand";
+}
+
+.difficulty {
+  font-family: "Quicksand";
+}
+
+#difficultyOutput {
+  font-family: "Press Start 2P", cursive;
+  font-weight: 600;
+}
+
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
+  margin-block-end: 0.5em;
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none; /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+  transition: opacity 0.2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4caf50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4caf50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.stateButtons {
+  width: 100%;
+  margin-block-end: 1em;
+}
+
+.stateButtons td button {
+  font-family: "Press Start 2P", cursive;
+}
+
+.scoreboard {
+  width: 100%;
+  margin-block-start: 1em;
+}
+
+.scoreboard td {
+  font-family: "Press Start 2P", cursive;
+}

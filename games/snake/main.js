@@ -84,6 +84,9 @@ function setDefaults() {
       nodes: [], // Stores the previous head positions to draw the tail.
       maxLength: 4, // tail length NOT including the head of the snake at (player.head.x, player.head.y).
     },
+    oob: function () {
+      this.head.x == -1 || this.head.x == conf.tileCount || this.head.y == -1 || this.head.y == conf.tileCount;
+    },
   };
   apple = {
     x: 0, // Apple x position relative to number of tiles in a row or column.
@@ -144,18 +147,21 @@ function onPressLeft() {
     player.vy = 0;
   }
 }
+
 function onPressUp() {
   if (gameTimer && player.vy != 1) {
     player.vx = 0;
     player.vy = -1;
   }
 }
+
 function onPressRight() {
   if (gameTimer && player.vx != -1) {
     player.vx = 1;
     player.vy = 0;
   }
 }
+
 function onPressDown() {
   if (gameTimer && player.vy != -1) {
     player.vx = 0;
@@ -194,19 +200,17 @@ function keyPush(event) {
 
 function game() {
   // Add previous head position to the beginning of tail nodes.
-  player.tail.nodes.unshift({ x: player.head.x, y: player.head.y });
+  player.tail.nodes.unshift({
+    x: player.head.x,
+    y: player.head.y,
+  });
 
   // Move snake head forward.
   player.head.x += player.vx;
   player.head.y += player.vy;
 
   // If snake head goes out of the game screen, clear the game timer and alert the player.
-  if (
-    player.head.x == -1 ||
-    player.head.x == conf.tileCount ||
-    player.head.y == -1 ||
-    player.head.y == conf.tileCount
-  ) {
+  if (player.oob()) {
     gameOver();
     return;
   }

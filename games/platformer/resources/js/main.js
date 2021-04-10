@@ -1,7 +1,7 @@
 /*
  * Jumpman Source Code
- * Adam Coscia
- * 05/29/2020
+ * turtledude125@gmail.com
+ * Last updated: 05/29/2020
  */
 
 const NPLATS = 10; // number of platforms to create

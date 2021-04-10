@@ -3,7 +3,11 @@ import { P3, axoProjMat } from "./draw.js";
 
 // function creates a 3D point (vertex)
 function vertex(x, y, z) {
-  return { x, y, z };
+  return {
+    x,
+    y,
+    z,
+  };
 }
 // an array of vertices
 const vertices = []; // an array of vertices
@@ -215,7 +219,7 @@ function startGame() {
   inputs.bind();
   inputs.attach();
   // Set drawstyle
-  axoProjMat.setProjection("Isometric");
+  axoProjMat.setProjection("Bimetric");
   // Set game timer.
   gameTimer = setInterval(gameLoop, 1000 / 60);
 }
@@ -240,7 +244,7 @@ function gameLoop() {
       for (x = hz; x < 4 - hz; x++) {
         // move the box
         const translated = vertices.map((vert) => {
-          return P3(vert.x + x * boxSize, vert.y + y * boxSize, vert.z + z * boxSize);
+          return P3(vert.x + x * boxSize + canvas.width / 2, vert.y + y * boxSize, vert.z + z * boxSize);
         });
 
         // create a new array of 2D projected verts
@@ -258,4 +262,5 @@ function gameLoop() {
       }
     }
   }
+  clearTimeout(gameTimer);
 }
