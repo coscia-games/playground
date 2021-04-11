@@ -39,36 +39,6 @@
   font-family: "Press Start 2P", cursive;
 }
 
-.keypad {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.keypad td {
-  font-family: "Press Start 2P", cursive;
-  font-size: 2em;
-  cursor: pointer;
-  width: 30%;
-  height: 0;
-  border: 1px solid black;
-}
-
-.keypad td:after,
-.keypad td:before {
-  content: "";
-  display: block;
-  padding-bottom: calc(50% - 0.5em);
-}
-
-.keypad td:hover {
-  background-color: gainsboro;
-}
-
-.keypad td:active {
-  background-color: grey;
-}
-
 .info {
   font-family: "Quicksand";
 }

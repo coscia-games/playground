@@ -23,26 +23,18 @@
     <div class="flex column center-text" style="min-width: 100px">
       <h1 class="header">Isometric</h1>
 
-      <p class="info">
-        Move by pressing the below arrows
-        <br />
-        or using your keyboard arrow keys!
-      </p>
+      <p class="info">Set the projection style</p>
 
-      <table class="keypad">
-        <tbody>
-          <tr>
-            <td style="background-color: white; cursor: default; border: none"></td>
-            <td id="uparrow">&#x21e7;</td>
-            <td style="background-color: white; cursor: default; border: none"></td>
-          </tr>
-          <tr>
-            <td id="leftarrow">&#x21e6;</td>
-            <td id="downarrow">&#x21e9;</td>
-            <td id="rightarrow">&#x21e8;</td>
-          </tr>
-        </tbody>
-      </table>
+      <select id="projectionSelector">
+        <option value="PixelBimetric">Pixel Bimetric</option>
+        <option value="PixelTrimetric">Pixel Trimetric</option>
+        <option value="Isometric">Isometric</option>
+        <option value="Bimetric">Bimetric</option>
+        <option value="Trimetric">Trimetric</option>
+        <option value="Military">Military</option>
+        <option value="Cavalier">Cavalier</option>
+        <option value="TopDown">Top Down</option>
+      </select>
     </div>
 
     <!-- Game -->
