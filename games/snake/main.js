@@ -84,8 +84,8 @@ function setDefaults() {
       nodes: [], // Stores the previous head positions to draw the tail.
       maxLength: 4, // tail length NOT including the head of the snake at (player.head.x, player.head.y).
     },
-    oob: function () {
-      this.head.x == -1 || this.head.x == conf.tileCount || this.head.y == -1 || this.head.y == conf.tileCount;
+    outOfBounds: function () {
+      return this.head.x == -1 || this.head.x == conf.tileCount || this.head.y == -1 || this.head.y == conf.tileCount;
     },
   };
   apple = {
@@ -210,7 +210,7 @@ function game() {
   player.head.y += player.vy;
 
   // If snake head goes out of the game screen, clear the game timer and alert the player.
-  if (player.oob()) {
+  if (player.outOfBounds()) {
     gameOver();
     return;
   }
