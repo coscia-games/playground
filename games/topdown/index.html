@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title id="title">Snake</title>
+  <title id="title">Top Down</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <!-- Google Fonts -->
@@ -18,39 +18,12 @@
 </head>
 
 <body style="touch-action: manipulation">
-  <div class="grid-container">
+  <div class="flex row">
     <!-- Instructions -->
     <div class="flex column center-text" style="min-width: 100px">
-      <h1 class="header">Snake</h1>
-
-      <table class="stateButtons">
-        <tbody>
-          <tr>
-            <td>
-              <button id="stateButton" onclick="startGame()">Play!</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="difficulty">
-        <tbody>
-          <tr>
-            <td style="float: left">Difficulty</td>
-            <td style="float: right">
-              <span id="difficultyOutput">Normal</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="slidecontainer">
-        <input type="range" min="1" max="3" value="1" class="slider" id="difficultySlider" />
-      </div>
+      <h1 class="header">Top Down</h1>
 
       <p class="info">
-        Press spacebar to pause.
-        <br />
         Move by pressing the below arrows
         <br />
         or using your keyboard arrow keys!
@@ -73,16 +46,8 @@
     </div>
 
     <!-- Game -->
-    <div class="flex column" style="min-width: 200px">
+    <div class="flex column" style="min-width: 300px">
       <canvas id="board"></canvas>
-
-      <table class="scoreboard center-text">
-        <tbody>
-          <tr>
-            <td>Apples Eaten: <span id="scoreOutput">0 </span></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </body>

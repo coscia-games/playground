@@ -3,69 +3,8 @@
   display: block;
 }
 
-.flex {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  -ms-box-orient: horizontal;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: flex;
-}
-
-.row {
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  margin: 8px 0;
-}
-
-.column {
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  margin: 0 8px;
-}
-
-.center-text {
-  text-align: center;
-}
-
 .header {
   font-family: "Press Start 2P", cursive;
-}
-
-.keypad {
-  width: 90%;
-  padding-left: 10%;
-}
-
-.keypad td {
-  font-family: "Press Start 2P", cursive;
-  font-size: 2em;
-  cursor: pointer;
-  width: 30%;
-  height: 0;
-  border: 1px solid black;
-}
-
-.keypad td:after,
-.keypad td:before {
-  content: "";
-  display: block;
-  padding-bottom: calc(50% - 0.5em);
-}
-
-.keypad td:hover {
-  background-color: gainsboro;
-}
-
-.keypad td:active {
-  background-color: grey;
 }
 
 .info {

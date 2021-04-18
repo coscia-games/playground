@@ -1,0 +1,12 @@
+h1 {
+  padding: 10px;
+  font-size: 6em;
+  color: green;
+  margin: auto;
+  text-align: center;
+}
+
+#board {
+  margin: auto;
+  display: block;
+}
