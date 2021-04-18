@@ -67,9 +67,9 @@ $("#projectionSelector").on("change", function () {
 /** FUNCTIONS */
 
 function setCanvas() {
-  // width x height
-  canvas.width = Math.floor(Math.min(window.innerWidth - canvas.parentNode.clientWidth, window.innerHeight - 24));
-  canvas.height = canvas.width * (9 / 16); // Widescreen aspect ratio
+  // Set canvas width and height based on parent node width
+  canvas.width = 0.7 * canvas.parentNode.clientWidth;
+  canvas.height = canvas.width * (3 / 4); // 4:3 aspect ratio
   // style the canvas
   canvas.style.border = "5px solid gray";
 }

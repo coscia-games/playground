@@ -1,12 +1,37 @@
-#board {
-  margin: auto;
-  display: block;
+/* 
+  TOP-LEVEL
+*/
+
+.flex-container {
+  font-family: "Quicksand";
+  padding: 2rem;
 }
 
-.header {
+/* 
+  INSTRUCTIONS
+*/
+
+.instructions-container {
+  padding: 0 1rem;
+  flex: 1;
+  min-width: 225px;
+}
+
+.title {
   font-family: "Press Start 2P", cursive;
 }
 
-.info {
-  font-family: "Quicksand";
+/* 
+  GAME CONTAINER
+*/
+
+.game-container {
+  padding: 0 1rem;
+  flex: 2;
+  min-width: 200px;
+}
+
+#board {
+  margin: auto;
+  display: block;
 }
