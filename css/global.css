@@ -2,51 +2,30 @@
 	Global stylesheet
 */
 
-.flex {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  -ms-box-orient: horizontal;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -moz-flex;
-  display: -webkit-flex;
+body {
+  font-size: clamp(0.5rem, 0.3rem + 1vw, 1.9rem);
+}
+
+.flex-container {
   display: flex;
-}
-
-.row {
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  margin: 8px 0;
-}
-
-.column {
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  margin: 0 8px;
-}
-
-.center-all {
+  flex-flow: row wrap;
   justify-content: center;
   align-items: center;
+  align-content: center;
 }
 
-.center-text {
+.text-center {
   text-align: center;
 }
-
 
 /*
   KEYPAD
 */
 
 .keypad {
-  width: 90%;
-  padding-left: 10%;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .keypad td {

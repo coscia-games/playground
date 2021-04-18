@@ -28,9 +28,9 @@ window.onresize = function () {
 /** FUNCTIONS */
 
 function setCanvas() {
-  // width x height
-  canvas.width = Math.floor(Math.min(window.innerWidth - canvas.parentNode.clientWidth, window.innerHeight - 24));
-  canvas.height = canvas.width * (9 / 16); // Widescreen aspect ratio
+  // Set canvas width and height based on parent node width
+  canvas.width = 0.7 * canvas.parentNode.clientWidth;
+  canvas.height = canvas.width * (3 / 4); // 4:3 aspect ratio
   // style the canvas
   canvas.style.border = "5px solid gray";
 }
@@ -45,7 +45,7 @@ function setDefaults() {
     fps: 30,
     gravity: 0.6,
     platforms: [],
-    ground: canvas.height / 2 + 100,
+    ground: 7 * (canvas.height / 8),
   };
   player = {
     holdLeft: false,

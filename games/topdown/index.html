@@ -18,17 +18,24 @@
 </head>
 
 <body style="touch-action: manipulation">
-  <div class="flex row">
-    <!-- Instructions -->
-    <div class="flex column center-text" style="min-width: 100px">
-      <h1 class="header">Top Down</h1>
+  <div class="flex-container text-center">
+    <!-- INSTRUCTIONS -->
+    <div class="instructions-container">
+      <!-- HEADER -->
+      <header class="title">
+        <h1>Top Down</h1>
+      </header>
 
-      <p class="info">
-        Move by pressing the below arrows
-        <br />
-        or using your keyboard arrow keys!
-      </p>
+      <!-- INFO -->
+      <div class="info">
+        <p>
+          Move by pressing the below arrows
+          <br />
+          or using your keyboard arrow keys!
+        </p>
+      </div>
 
+      <!-- KEY PAD -->
       <table class="keypad">
         <tbody>
           <tr>
@@ -45,8 +52,8 @@
       </table>
     </div>
 
-    <!-- Game -->
-    <div class="flex column" style="min-width: 300px">
+    <!-- GAME -->
+    <div class="game-container">
       <canvas id="board"></canvas>
     </div>
   </div>

@@ -29,9 +29,9 @@ window.onresize = function () {
 /** FUNCTIONS */
 
 function setCanvas() {
-  // width x height
-  canvas.width = Math.floor(Math.min(window.innerWidth - canvas.parentNode.clientWidth, window.innerHeight - 84));
-  canvas.height = canvas.width; // keep the board square!
+  // Set canvas width and height based on parent node width
+  canvas.width = 0.7 * canvas.parentNode.clientWidth;
+  canvas.height = canvas.width; // 1:1 aspect ratio
   // style the canvas
   canvas.style.background = "black";
   canvas.style.border = "5px solid gray";
