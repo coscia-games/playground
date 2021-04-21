@@ -29,6 +29,7 @@ The big downside is being completely tied to the program --- if it's not what yo
 This is where the "name brand" programs live -- makes sense that companies would use these!
 
 | Example | Scripting Language | Link |
+| --- | --- | --- |
 | Unity | C# | [Link](https://unity.com/) |
 | Unreal Engine | C++ | [Link](https://www.unrealengine.com/en-US/) |
 
@@ -38,7 +39,7 @@ This means you'll be learning their file structures, their tools, and their way 
 While this speeds up dev considerably in the long run, it forces you to do things "their way" for the most part.
 
 | Example | Best For | Link |
-| --- | --- |
+| --- | --- | --- |
 | Phaser | 2D Games | [Link](https://phaser.io/) |
 | BabylonJS | 3D Games | [Link](https://www.babylonjs.com/) |
 
