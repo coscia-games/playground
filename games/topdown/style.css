@@ -2,9 +2,9 @@
   TOP-LEVEL
 */
 
-.flex-container {
+.flex-row {
   font-family: "Quicksand";
-  padding: 2rem;
+  padding: 1rem;
 }
 
 /* 
@@ -12,9 +12,9 @@
 */
 
 .instructions-container {
-  padding: 0 1rem;
   flex: 1;
-  min-width: 225px;
+  padding: 1rem;
+  min-width: 250px;
 }
 
 .title {
@@ -26,12 +26,8 @@
 */
 
 .game-container {
-  padding: 0 1rem;
   flex: 1.5;
-  min-width: 200px;
-}
-
-#board {
-  margin: auto;
-  display: block;
+  padding: 1rem;
+  min-width: 300px;
+  border: 5px solid gray;
 }

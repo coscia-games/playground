@@ -1,57 +1,41 @@
 import { InputController } from "../../modules/inputController.js";
 
-/** GLOBALS */
+// physics engine
+var Engine = Matter.Engine,
+  Render = Matter.Render,
+  Runner = Matter.Runner,
+  Bodies = Matter.Bodies,
+  Composite = Matter.Composite;
+
+// input controller
+var inputController = new InputController();
 
 // Document Elements
-var canvas = document.getElementById("board");
-var context = canvas.getContext("2d");
-
-// Game Objects
-var inputController = new InputController();
-var game; // Game properties
-var usr; // usr properties
-var pc; // pc properties
+var appContainer = $("#appContainer");
 
 // Window events
 window.onload = function () {
-  setCanvas(); // set canvas size and style
-  setDefaults(); // initialize game objects
-  startGame(); // start the game
+  load(); // load the app
 };
 window.onresize = function () {
   location.reload(); // refresh the entire page
 };
 
-/** FUNCTIONS */
-
-function setCanvas() {
-  // Set canvas width and height based on parent node width
-  canvas.width = 0.7 * canvas.parentNode.clientWidth;
-  canvas.height = canvas.width * (3 / 4); // 4:3 aspect ratio
-  // style the canvas
-  canvas.style.border = "5px solid gray";
-}
-
-function clearCanvas() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  canvas.style.border = "5px solid gray";
-}
-
-function setDefaults() {
-  game = {
-    fps: 60,
+function load() {
+  // check if running WebGL or canvas
+  let type = "WebGL";
+  if (!PIXI.utils.isWebGLSupported()) type = "canvas";
+  PIXI.utils.sayHello(type);
+  // Set options
+  let opts = {
+    width: 0.8 * appContainer.width(), // default: 800
+    height: 0.8 * appContainer.width() * (3 / 4), // default: 600
+    antialias: true, // default: false
+    transparent: false, // default: false
+    resolution: 1, // default: 1
   };
-  usr = {};
-  pc = {};
-}
-
-function startGame() {
-  // attach inputs to event listenters
-  inputController.attachListeners();
-  // run game
-  setInterval(gameLoop, 1000 / game.fps);
-}
-
-function gameLoop() {
-  // TODO
+  // Create a Pixi Application
+  let app = new PIXI.Application(opts);
+  // Add the canvas that Pixi automatically created for you to the HTML document
+  appContainer.append(app.view);
 }

@@ -5,20 +5,22 @@
   <title id="title">Top Down</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <!-- Google Fonts -->
+  <!-- FONTS -->
   <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
-  <!-- GLOBAL CSS -->
+  <!-- CSS -->
   <link rel="stylesheet" href="../../global.css" />
-  <!-- LOCAL CSS -->
   <link rel="stylesheet" href="style.css" />
-  <!-- LOCAL JS -->
+  <!-- JS -->
+  <script src="../../libs/jquery-3.6.0.min.js" async></script>
+  <script src="../../libs/pixi.min.js" async></script>
+  <script src="../../libs/matter.min.js" async></script>
   <script type="module" src="main.js" defer></script>
 </head>
 
 <body style="touch-action: manipulation">
-  <div class="flex-container text-center">
+  <div class="flex-row text-center">
     <!-- INSTRUCTIONS -->
     <div class="instructions-container">
       <!-- HEADER -->
@@ -53,9 +55,7 @@
     </div>
 
     <!-- GAME -->
-    <div class="game-container">
-      <canvas id="board"></canvas>
-    </div>
+    <div id="appContainer" class="game-container"></div>
   </div>
 </body>
 

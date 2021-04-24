@@ -48,8 +48,6 @@ export class InputController {
     Object.getOwnPropertyNames(this.eventCodeMap).forEach((key) => {
       let value = context.eventCodeMap[key];
       value.code = key; // set reference to key name
-      value.up = () => console.log(`keyup > ${key}`);
-      value.down = () => console.log(`keydown > ${key}`);
     });
 
     /**
@@ -66,8 +64,6 @@ export class InputController {
       let value = context.clickMap[key];
       value.id = key; // set reference to key name
       value.ref = document.getElementById(key);
-      value.press = () => console.log(`mousedown touchstart > ${key}`);
-      value.depress = () => console.log(`mouseup touchend > ${key}`);
     });
   }
 

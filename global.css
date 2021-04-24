@@ -2,7 +2,7 @@
 	Global stylesheet
 */
 
-.flex-container {
+.flex-row {
   font-size: clamp(0.5rem, 0.3rem + 1vw, 1.9rem);
   display: flex;
   flex-flow: row wrap;
