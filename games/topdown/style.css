@@ -25,10 +25,7 @@
   text-align: center;
 }
 
-#res-disp {
-  font: inherit;
-}
-
+#res-disp,
 #fs-btn {
   font: inherit;
 }
