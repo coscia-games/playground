@@ -13,9 +13,9 @@
   <link rel="stylesheet" href="../../global.css" />
   <link rel="stylesheet" href="style.css" />
   <!-- JS -->
-  <script src="../../libs/jquery-3.6.0.min.js" async></script>
-  <script src="../../libs/pixi.min.js" async></script>
-  <script src="../../libs/matter.min.js" async></script>
+  <script src="../../libs/jquery-3.6.0.min.js"></script>
+  <script src="../../libs/pixi.min.js"></script>
+  <script src="../../libs/matter.min.js"></script>
   <script type="module" src="main.js" defer></script>
 </head>
 
@@ -27,6 +27,12 @@
       <header class="title">
         <h1>Top Down</h1>
       </header>
+
+      <div class="appSettings">
+        <span id="res-disp">Resolution: <strong id="res">Unknown</strong></span>
+        &nbsp;
+        <button id="fs-btn">Fullscreen</button>
+      </div>
 
       <!-- INFO -->
       <div class="info">

@@ -21,6 +21,18 @@
   font-family: "Press Start 2P", cursive;
 }
 
+.appSettings {
+  text-align: center;
+}
+
+#res-disp {
+  font: inherit;
+}
+
+#fs-btn {
+  font: inherit;
+}
+
 /* 
   GAME CONTAINER
 */
@@ -29,5 +41,4 @@
   flex: 1.5;
   padding: 1rem;
   min-width: 300px;
-  border: 5px solid gray;
 }

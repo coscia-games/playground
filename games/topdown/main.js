@@ -1,41 +1,57 @@
 import { InputController } from "../../modules/inputController.js";
 
-// physics engine
-var Engine = Matter.Engine,
-  Render = Matter.Render,
-  Runner = Matter.Runner,
-  Bodies = Matter.Bodies,
-  Composite = Matter.Composite;
+(function (Application) {
+  // common 4:3 resolutions
+  var resMap = {
+    widths: [1440, 1280, 1024, 960, 800, 640, 512, 400, 320, 256],
+    heights: [1080, 960, 768, 720, 600, 480, 384, 300, 240, 192],
+  };
 
-// input controller
-var inputController = new InputController();
+  // create new input controller
+  var inputController = new InputController();
 
-// Document Elements
-var appContainer = $("#appContainer");
-
-// Window events
-window.onload = function () {
-  load(); // load the app
-};
-window.onresize = function () {
-  location.reload(); // refresh the entire page
-};
-
-function load() {
-  // check if running WebGL or canvas
-  let type = "WebGL";
-  if (!PIXI.utils.isWebGLSupported()) type = "canvas";
-  PIXI.utils.sayHello(type);
-  // Set options
-  let opts = {
-    width: 0.8 * appContainer.width(), // default: 800
-    height: 0.8 * appContainer.width() * (3 / 4), // default: 600
+  // create new pixi app
+  var app = new PIXI.Application({
     antialias: true, // default: false
     transparent: false, // default: false
     resolution: 1, // default: 1
+  });
+
+  // create app container and methods
+  var appContainer = {
+    $elem: $("#appContainer"),
+    onResize: function (isFullscreen = false) {
+      if (isFullscreen) {
+        app.renderer.resize(window.innerWidth, window.innerHeight);
+      } else {
+        // get nearest resolution
+        let targetWidth = this.$elem.width();
+        for (var i = 0; i < resMap.widths.length; i++) {
+          if (resMap.widths[i] < targetWidth) {
+            app.renderer.resize(resMap.widths[i], resMap.heights[i]);
+            $("#res").html(`${resMap.widths[i]} x ${resMap.heights[i]}`);
+            break;
+          }
+        }
+      }
+    },
   };
-  // Create a Pixi Application
-  let app = new PIXI.Application(opts);
-  // Add the canvas that Pixi automatically created for you to the HTML document
-  appContainer.append(app.view);
-}
+
+  Application.init = function () {
+    // app.renderer.autoResize = true;
+    appContainer.onResize();
+    // Add the canvas that Pixi automatically created for you to the HTML document
+    appContainer.$elem.append(app.view);
+    // attach event listeners and handlers to fullscreen button
+    app.renderer.view.onfullscreenchange = (event) =>
+      appContainer.onResize(document.fullscreenElement === event.target);
+    $("#fs-btn").on("click", () =>
+      !document.fullscreenElement ? app.renderer.view.requestFullscreen() : document.exitFullscreen()
+    );
+    // resize app on window resize
+    $(window).on("resize", () => (!document.fullscreenElement ? appContainer.onResize() : {}));
+  };
+})((window.Application = window.Application || {}));
+
+// Call init
+window.Application.init();
