@@ -18,12 +18,12 @@
 }
 
 .title,
-.state-buttons,
 .difficulty {
   font-family: "Press Start 2P", cursive;
 }
 
-.state-buttons > button {
+#stateButton {
+  font: inherit;
   font-family: "Press Start 2P", cursive;
 }
 
