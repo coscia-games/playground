@@ -1,86 +1,103 @@
 import { InputController } from "../../modules/inputController.js";
 
+// create common 4:3 resolutions map
+var resolutionMap = {
+  widths: [1440, 1280, 1024, 960, 800, 640, 512, 400, 320, 256],
+  heights: [1080, 960, 768, 720, 600, 480, 384, 300, 240, 192],
+  getNearest: function (targetWidth) {
+    for (var i = 0; i < this.widths.length; i++) {
+      if (this.widths[i] < targetWidth) return { width: this.widths[i], height: this.heights[i] };
+    }
+  },
+};
+
+// create assets reference map
+var assetsMap = {
+  resources: [{ name: "man", url: "assets/man.png" }],
+  sprites: {},
+};
+
+// create Application instance
 (function (Application) {
-  // common 4:3 resolutions
-  var resMap = {
-    widths: [1440, 1280, 1024, 960, 800, 640, 512, 400, 320, 256],
-    heights: [1080, 960, 768, 720, 600, 480, 384, 300, 240, 192],
-  };
+  /** PRIVATE MEMBERS */
 
-  // create new input controller
-  var inputController = new InputController();
-
-  // create new pixi app
-  var app = new PIXI.Application({
-    antialias: true, // default: false
+  // create new pixi application
+  var pixiApp = new PIXI.Application({
+    antialias: true,
     backgroundColor: 0x1099bb,
     resolution: window.devicePixelRatio || 1,
+    autoDensity: true,
   });
 
-  // create app container and methods
+  // create pixiApp container reference and methods
   var appContainer = {
     $elem: $("#appContainer"),
+    get width() {
+      return this.$elem.width();
+    },
+    get height() {
+      return this.$elem.height();
+    },
     onResize: function (isFullscreen = false) {
       if (isFullscreen) {
-        app.renderer.resize(window.innerWidth, window.innerHeight);
+        // use entire window
+        pixiApp.renderer.resize(window.innerWidth, window.innerHeight);
       } else {
-        // get nearest resolution
-        let targetWidth = this.$elem.width();
-        for (var i = 0; i < resMap.widths.length; i++) {
-          if (resMap.widths[i] < targetWidth) {
-            app.renderer.resize(resMap.widths[i], resMap.heights[i]);
-            $("#res").html(`${resMap.widths[i]} x ${resMap.heights[i]}`);
-            break;
-          }
-        }
+        // get nearest resolution to app container's width
+        const resolution = resolutionMap.getNearest(this.width);
+        pixiApp.renderer.resize(resolution.width, resolution.height);
+        $("#res").html(`${resolution.width} x ${resolution.height}`);
       }
     },
   };
 
-  Application.init = function () {
-    // set app sizes and add
-    appContainer.onResize();
-    appContainer.$elem.append(app.view);
+  /** PRIVATE METHODS */
 
-    // attach fullscreen event listeners and
-    app.renderer.view.onfullscreenchange = (event) =>
+  function setScene() {
+    // establish main character
+    let manSprite = assetsMap.sprites["man"];
+    manSprite.anchor.set(0.5, 1); // in center-bottom of body
+    pixiApp.stage.addChild(manSprite);
+  }
+
+  function drawScene(delta) {
+    let manSprite = assetsMap.sprites["man"];
+    manSprite.position.set(pixiApp.screen.width / 2, pixiApp.screen.height / 2);
+  }
+
+  /** PUBLIC MEMBERS AND METHODS */
+
+  Application.init = function () {
+    // attach fullscreen event listeners and handlers
+    pixiApp.renderer.view.onfullscreenchange = (event) =>
       appContainer.onResize(document.fullscreenElement === event.target);
     $("#fs-btn").on("click", () =>
-      !document.fullscreenElement ? app.renderer.view.requestFullscreen() : document.exitFullscreen()
+      !document.fullscreenElement ? pixiApp.renderer.view.requestFullscreen() : document.exitFullscreen()
     );
     $(window).on("resize", () => (!document.fullscreenElement ? appContainer.onResize() : {}));
 
-    // load sprites to the stage
-    const container = new PIXI.Container();
-
-    app.stage.addChild(container);
-
-    // Create a new texture
-    const texture = PIXI.Texture.from("assets/man.png");
-
-    // Create a 5x5 grid of bunnies
-    for (let i = 0; i < 25; i++) {
-      const man = new PIXI.Sprite(texture);
-      man.anchor.set(0.5);
-      man.x = (i % 5) * 40;
-      man.y = Math.floor(i / 5) * 40;
-      container.addChild(man);
-    }
-
-    // Move container to the center
-    container.x = app.screen.width / 2;
-    container.y = app.screen.height / 2;
-
-    // Center man sprite in local container coordinates
-    container.pivot.x = container.width / 2;
-    container.pivot.y = container.height / 2;
-
-    // Listen for animate update
-    app.ticker.add((delta) => {
-      container.rotation -= 0.01 * delta;
+    // load resources
+    const pixiLoader = PIXI.Loader.shared;
+    pixiLoader.add(assetsMap.resources);
+    pixiLoader.load((loader, resources) => {
+      for (const [name, _] of Object.entries(resources)) {
+        assetsMap.sprites[name] = new PIXI.Sprite(resources[name].texture);
+      }
+      setScene(); // use loaded sprites to set the stage
+      appContainer.onResize(); // call onResize to resize pixi app
+      appContainer.$elem.empty().append(pixiApp.view); // add pixi app to the DOM
+      Application.startGame(); // start the game!
     });
+  };
+
+  Application.startGame = function () {
+    pixiApp.ticker.add((delta) => drawScene(delta)); // start the ticker
+  };
+
+  Application.stopGame = function () {
+    pixiApp.ticket.stop(); // stop the ticker
   };
 })((window.Application = window.Application || {}));
 
-// Call init
+// initialize Application
 window.Application.init();
