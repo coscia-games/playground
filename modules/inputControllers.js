@@ -31,7 +31,7 @@ const KeyboardEventKeys = ["w", "a", "s", "d", "p", " ", "Enter", "ArrowLeft", "
 const ClickableElementIds = ["leftarrow", "uparrow", "rightarrow", "downarrow"];
 
 /**
- * Controller class for keyboard and click inputs.
+ * Controller class for keyboard inputs.
  */
 export class KeyboardController {
   eventKeyMap;
@@ -72,13 +72,13 @@ export class KeyboardController {
         if (!e.repeat) {
           const eventKeyObj = context.eventKeyMap[e.key];
           if (eventKeyObj && eventKeyObj.hasOwnProperty("down")) {
-            eventKeyObj.down(); // call down() for key event
-            context.eventKeyStack.push(eventKeyObj); // add key to key stack
+            eventKeyObj.down(); // call down() for eventKeyObj
+            context.eventKeyStack.push(eventKeyObj); // add eventKeyObj to stack
           }
           const eventCodeObj = context.eventCodeMap[e.code];
           if (eventCodeObj && eventCodeObj.hasOwnProperty("down")) {
-            eventCodeObj.down(); // call down() for code event
-            context.eventCodeStack.push(eventCodeObj); // add code to code stack
+            eventCodeObj.down(); // call down() for eventCodeObj
+            context.eventCodeStack.push(eventCodeObj); // add eventCodeObj to stack
           }
         }
       },

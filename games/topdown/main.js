@@ -34,14 +34,11 @@ var resolutionMap = {
       return this.$elem.height();
     },
     onResize: function (isFullscreen = false) {
-      if (isFullscreen) {
-        pixiApp.renderer.resize(window.innerWidth, window.innerHeight); // use entire window
-      } else {
-        // get nearest resolution to app container's width
-        const resolution = resolutionMap.getNearest(this.width);
-        pixiApp.renderer.resize(resolution.width, resolution.height);
-        $("#res").html(`${resolution.width} x ${resolution.height}`);
-      }
+      // get nearest resolution
+      const targetWidth = isFullscreen ? window.innerWidth : this.width;
+      const resolution = resolutionMap.getNearest(targetWidth);
+      pixiApp.renderer.resize(resolution.width, resolution.height);
+      $("#res").html(`${resolution.width} x ${resolution.height}`);
     },
   };
 
@@ -156,18 +153,21 @@ var resolutionMap = {
   /** PUBLIC MEMBERS AND METHODS */
 
   Application.init = function () {
-    // attach fullscreen event listeners and handlers
-    pixiApp.renderer.view.onfullscreenchange = (event) => {
-      appContainer.onResize(document.fullscreenElement === event.target);
-    };
-    $("#fs-btn").on("click", () => {
-      !document.fullscreenElement ? pixiApp.renderer.view.requestFullscreen() : document.exitFullscreen();
-    });
+    // attach event listeners and handlers to document elements
     $(window).on("resize", () => {
       !document.fullscreenElement ? appContainer.onResize() : {};
     });
+    $("#fs-btn").on("click", () => {
+      !document.fullscreenElement ? pixiApp.renderer.view.requestFullscreen() : document.exitFullscreen();
+    });
+    $("#db-btn").on("click", () => {
+      pc._postext.visible = !pc._postext.visible;
+    });
 
-    // attach keyboard controls to event manager
+    // set event listeners and handlers for application objects
+    pixiApp.renderer.view.onfullscreenchange = (event) => {
+      appContainer.onResize(document.fullscreenElement === event.target);
+    };
     kbc.attachListenersAndHandlers();
 
     // load resources
