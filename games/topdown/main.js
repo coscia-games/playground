@@ -1,4 +1,5 @@
-import { InputController } from "../../modules/inputController.js";
+import { assetsMap } from "./assets/assets.map.js";
+import { KeyboardController } from "../../modules/inputControllers.js";
 
 // create common 4:3 resolutions map
 var resolutionMap = {
@@ -9,12 +10,6 @@ var resolutionMap = {
       if (this.widths[i] < targetWidth) return { width: this.widths[i], height: this.heights[i] };
     }
   },
-};
-
-// create assets reference map
-var assetsMap = {
-  resources: [{ name: "man", url: "assets/man.png" }],
-  sprites: {},
 };
 
 // create Application instance
@@ -52,9 +47,9 @@ var assetsMap = {
 
   // create player character object to track state
   var pc = {
-    /** Hidden PIXI Members */
-    _sprite: new PIXI.Sprite(), // PIXI.Sprite
-    _postext: new PIXI.Text(), // PIXI.Text
+    /** PIXI class instance members */
+    _sprite: new PIXI.Sprite(), // PIXI.Sprite instance
+    _postext: new PIXI.Text("", { fontSize: 12 }), // PIXI.Text instance
     addToStage: function () {
       pixiApp.stage.addChild(pc._sprite); // add pc to the stage
       pixiApp.stage.addChild(pc._postext); // add position text to the stage
@@ -80,7 +75,10 @@ var assetsMap = {
     },
     setPos: function (x, y) {
       this._sprite.position.set(x, y);
-      this._postext.text = `x: ${this._sprite.x}, y: ${this._sprite.y}, facing: ${this.direction}`;
+      this._postext.text = `
+        x: ${this._sprite.x}, y: ${this._sprite.y}, facing: ${this.direction}\n
+        ${kbc.eventCodeStack.map((x) => x.code).join(", ")}
+      `;
     },
     /** Velocity */
     get vx() {
@@ -103,32 +101,42 @@ var assetsMap = {
     },
   };
 
-  // create new input controller
-  var gamepad = new InputController();
+  // create new keyboard controller
+  var kbc = new KeyboardController();
+  /** Up */
+  kbc.eventCodeMap.KeyW.down = () => pc.setVel(pc.vx, -1);
+  kbc.eventCodeMap.ArrowUp.down = () => pc.setVel(pc.vx, -1);
+  kbc.eventCodeMap.KeyW.up = () => pc.setVel(pc.vx, 0);
+  kbc.eventCodeMap.ArrowUp.up = () => pc.setVel(pc.vx, 0);
+  /** Right */
+  kbc.eventCodeMap.KeyD.down = () => pc.setVel(1, pc.vy);
+  kbc.eventCodeMap.ArrowRight.down = () => pc.setVel(1, pc.vy);
+  kbc.eventCodeMap.KeyD.up = () => pc.setVel(0, pc.vy);
+  kbc.eventCodeMap.ArrowRight.up = () => pc.setVel(0, pc.vy);
+  /** Down */
+  kbc.eventCodeMap.KeyS.down = () => pc.setVel(pc.vx, 1);
+  kbc.eventCodeMap.ArrowDown.down = () => pc.setVel(pc.vx, 1);
+  kbc.eventCodeMap.KeyS.up = () => pc.setVel(pc.vx, 0);
+  kbc.eventCodeMap.ArrowDown.up = () => pc.setVel(pc.vx, 0);
+  /** Left */
+  kbc.eventCodeMap.KeyA.down = () => pc.setVel(-1, pc.vy);
+  kbc.eventCodeMap.ArrowLeft.down = () => pc.setVel(-1, pc.vy);
+  kbc.eventCodeMap.KeyA.up = () => pc.setVel(0, pc.vy);
+  kbc.eventCodeMap.ArrowLeft.up = () => pc.setVel(0, pc.vy);
 
   /** PRIVATE METHODS */
 
-  function setMoves() {
-    /** Up */
-    gamepad.eventCodeMap.KeyW.down = () => pc.setVel(pc.vx, -1);
-    gamepad.eventCodeMap.ArrowUp.down = () => pc.setVel(pc.vx, -1);
-    gamepad.eventCodeMap.KeyW.up = () => pc.setVel(pc.vx, 0);
-    gamepad.eventCodeMap.ArrowUp.up = () => pc.setVel(pc.vx, 0);
-    /** Right */
-    gamepad.eventCodeMap.KeyD.down = () => pc.setVel(1, pc.vy);
-    gamepad.eventCodeMap.ArrowRight.down = () => pc.setVel(1, pc.vy);
-    gamepad.eventCodeMap.KeyD.up = () => pc.setVel(0, pc.vy);
-    gamepad.eventCodeMap.ArrowRight.up = () => pc.setVel(0, pc.vy);
-    /** Down */
-    gamepad.eventCodeMap.KeyS.down = () => pc.setVel(pc.vx, 1);
-    gamepad.eventCodeMap.ArrowDown.down = () => pc.setVel(pc.vx, 1);
-    gamepad.eventCodeMap.KeyS.up = () => pc.setVel(pc.vx, 0);
-    gamepad.eventCodeMap.ArrowDown.up = () => pc.setVel(pc.vx, 0);
-    /** Left */
-    gamepad.eventCodeMap.KeyA.down = () => pc.setVel(-1, pc.vy);
-    gamepad.eventCodeMap.ArrowLeft.down = () => pc.setVel(-1, pc.vy);
-    gamepad.eventCodeMap.KeyA.up = () => pc.setVel(0, pc.vy);
-    gamepad.eventCodeMap.ArrowLeft.up = () => pc.setVel(0, pc.vy);
+  /**
+   * Callback for PIXI Loader load() method. Sets the scene with the loaded assets.
+   * @param {*} loader The loader instance.
+   * @param {*} resources The resources texture map.
+   */
+  function loadComplete(loader, resources) {
+    for (const [name, _] of Object.entries(resources)) {
+      assetsMap.sprites[name] = new PIXI.Sprite(resources[name].texture); // load sprites from resource list
+    }
+    setScene(); // use loaded sprites to set the stage
+    Application.startGame(); // start the game!
   }
 
   function setScene() {
@@ -137,6 +145,8 @@ var assetsMap = {
     pc.setPos(pixiApp.renderer.view.width / 2, pixiApp.renderer.view.height / 2); // put pc in the center of the screen
     pc.setVel(0, 0); // start pc not moving
     pc.addToStage(); // add pc to the stage
+    appContainer.onResize(); // call onResize to resize pixi app
+    appContainer.$elem.empty().append(pixiApp.view); // add pixi app to the DOM
   }
 
   function drawScene(delta) {
@@ -157,24 +167,12 @@ var assetsMap = {
       !document.fullscreenElement ? appContainer.onResize() : {};
     });
 
-    // set gamepad controls
-    setMoves();
-    gamepad.attachKeyboardListenersAndHandlers();
-    gamepad.attachKeyboardListenersAndHandlers();
+    // attach keyboard controls to event manager
+    kbc.attachListenersAndHandlers();
 
     // load resources
-    const pixiLoader = PIXI.Loader.shared;
-    pixiLoader.add(assetsMap.resources);
-    pixiLoader.load((loader, resources) => {
-      for (const [name, _] of Object.entries(resources)) {
-        // load sprites from resource list
-        assetsMap.sprites[name] = new PIXI.Sprite(resources[name].texture);
-      }
-      setScene(); // use loaded sprites to set the stage
-      appContainer.onResize(); // call onResize to resize pixi app
-      appContainer.$elem.empty().append(pixiApp.view); // add pixi app to the DOM
-      Application.startGame(); // start the game!
-    });
+    PIXI.Loader.shared.add(assetsMap.resources); // use resource map to specify sprites to load
+    PIXI.Loader.shared.load(loadComplete); // load sprites, calling loadComplete() once finished
   };
 
   Application.startGame = function () {
