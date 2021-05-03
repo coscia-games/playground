@@ -23,11 +23,13 @@
 
 .appSettings {
   text-align: center;
+  margin-bottom: 1rem;
 }
 
 #res-disp,
 #fs-btn,
-#db-btn {
+#db-btn,
+#ar-sel {
   font: inherit;
 }
 

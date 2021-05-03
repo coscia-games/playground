@@ -1,16 +1,6 @@
 import { assetsMap } from "./assets/assets.map.js";
+import { resolutionMap } from "../../modules/resolution.map.js";
 import { KeyboardController } from "../../modules/inputControllers.js";
-
-// create common 4:3 resolutions map
-var resolutionMap = {
-  widths: [1440, 1280, 1024, 960, 800, 640, 512, 400, 320, 256],
-  heights: [1080, 960, 768, 720, 600, 480, 384, 300, 240, 192],
-  getNearest: function (targetWidth) {
-    for (var i = 0; i < this.widths.length; i++) {
-      if (this.widths[i] < targetWidth) return { width: this.widths[i], height: this.heights[i] };
-    }
-  },
-};
 
 // create Application instance
 (function (Application) {
@@ -18,28 +8,37 @@ var resolutionMap = {
 
   // create new pixi application
   var pixiApp = new PIXI.Application({
-    antialias: true,
-    backgroundColor: 0x1099bb,
+    antialias: false,
+    backgroundColor: 0xf0ffff,
     resolution: window.devicePixelRatio || 1,
     autoDensity: true,
   });
 
   // create pixiApp container reference and methods
   var appContainer = {
-    $elem: $("#appContainer"),
-    get width() {
-      return this.$elem.width();
+    $container: $("#appContainer"), // container element
+    screen: {
+      _elem: pixiApp.renderer.screen, // screen element
+      ar: $("#ar-sel").val(), // aspect ratio, choices are {16:9, 3:2, 4:3}
+      get w() {
+        return this._elem.width; // screen width
+      },
+      get h() {
+        return this._elem.height; // screen width
+      },
+      get tw() {
+        return this._elem.width / resolutionMap[this.ar].widths.slice(-1)[0]; // tile width
+      },
+      get th() {
+        return this._elem.height / resolutionMap[this.ar].heights.slice(-1)[0]; // tile height
+      },
     },
-    get height() {
-      return this.$elem.height();
-    },
-    onResize: function (isFullscreen = false) {
-      // get nearest resolution
-      const targetWidth = isFullscreen ? window.innerWidth : this.width;
-      const resolution = resolutionMap.getNearest(targetWidth);
-      pixiApp.renderer.resize(resolution.width, resolution.height);
-      $("#res").html(`${resolution.width} x ${resolution.height}`);
-      if (Application.state == "running") setScene();
+    resizeScreen: function (isFullscreen = false) {
+      const targetWidth = isFullscreen ? window.innerWidth : this.$container.width();
+      const r = resolutionMap.getNearest(this.screen.ar, targetWidth, window.innerHeight);
+      pixiApp.renderer.resize(r.width, r.height); // resize renderer
+      $("#res").html(`${r.width} x ${r.height}`); // update debug output
+      if (Application.state == "running") setScene(); // re-draw scene
     },
   };
 
@@ -97,6 +96,7 @@ var resolutionMap = {
 
   // create background object
   var bg = {
+    _container: new PIXI.Container(),
     _sprite: new PIXI.Sprite(),
   };
 
@@ -125,24 +125,6 @@ var resolutionMap = {
 
   /** PRIVATE METHODS */
 
-  function Grid() {
-    PIXI.Container.call(this);
-    var grid = [];
-    for (var j = 0; j < 15; j++) {
-      grid[j] = [];
-      for (var i = 0; i < 10; i++) {
-        grid[j][i] = new PIXI.Graphics();
-        grid[j][i].drawRect(0, 0, 16, 16);
-        grid[j][i].position.x = 16 * i;
-        grid[j][i].position.y = 16 * j;
-        this.addChild(grid[j][i]);
-      }
-    }
-    this.grid = grid;
-  }
-  Grid.prototype = Object.create(PIXI.Container.prototype);
-  Grid.prototype.constructor = Grid;
-
   /**
    * Callback for PIXI Loader load() method. Sets the scene with the loaded assets.
    * @param {*} loader The loader instance.
@@ -152,30 +134,34 @@ var resolutionMap = {
     for (const [name, _] of Object.entries(resources)) {
       assetsMap.textures[name] = resources[name].texture; // save texture
     }
-    appContainer.onResize(); // call onResize to resize pixi app
-    appContainer.$elem.empty().append(pixiApp.view); // add pixi app to the DOM
+    appContainer.resizeScreen(); // resize pixi app screen
+    appContainer.$container.empty().append(pixiApp.view); // add pixi app to the DOM
     Application.startGame(); // start the game!
   }
 
   function setStage() {
-    bg._sprite = new PIXI.TilingSprite(assetsMap.textures["grass"]); // load bg sprite
-    pixiApp.stage.addChild(bg._sprite); // add background tile to stage
+    /** BACKGROUND */
+    bg._container.scale.y = Math.atan(Math.sin(30 * (Math.PI / 180))); // 2:1 pixel ratio => dimetric
+    pixiApp.stage.addChild(bg._container); // add container to stage
+    bg._sprite = new PIXI.TilingSprite(assetsMap.textures["grid"]); // load bg sprite
+    bg._sprite.rotation = Math.PI / 4; // rotate background sprite
+    bg._container.addChild(bg._sprite); // add tiling sprite to container
+    /** PC */
     pc._sprite = new PIXI.Sprite(assetsMap.textures["man"]); // load pc sprite
+    pc._sprite.anchor.set(0.5, 1); // in center-bottom of body
     pixiApp.stage.addChild(pc._sprite); // add pc to the stage
     pixiApp.stage.addChild(pc._postext); // add position text to the stage
   }
 
   function setScene() {
-    const scw = pixiApp.renderer.screen.width; // screen width
-    const sch = pixiApp.renderer.screen.height; // screen height
-    /** Background */
-    bg._sprite.width = scw;
-    bg._sprite.height = sch;
-    bg._sprite.tileScale.set(scw / 240, sch / 160);
+    /** BACKGROUND */
+    bg._container.position.set(appContainer.screen.w / 3, 0);
+    bg._sprite.width = appContainer.screen.w;
+    bg._sprite.height = appContainer.screen.h;
+    bg._sprite.tileScale.set(appContainer.screen.tw, appContainer.screen.th); // scale bg sprites to tile width/height
     /** PC */
-    pc._sprite.anchor.set(0.5, 1); // in center-bottom of body
-    pc._sprite.scale.set(scw / 240, sch / 160);
-    pc.setPos(scw / 2, sch / 2); // put pc in the center of the screen
+    pc._sprite.scale.set(appContainer.screen.tw, appContainer.screen.th); // scale pc to tile width/height
+    pc.setPos(appContainer.screen.w / 2, appContainer.screen.h / 2); // put pc in the center of the screen
     pc.setVel(0, 0); // start pc not moving
   }
 
@@ -188,25 +174,34 @@ var resolutionMap = {
   Application.state = "unloaded";
 
   Application.init = function () {
-    Application.state = "initializing";
-    // attach event listeners and handlers to document elements
+    /** FLAGS */
+    Application.state = "initializing"; // set app state flag
+
+    /** LISTENERS & HANDLERS */
     $(window).on("resize", () => {
-      !document.fullscreenElement ? appContainer.onResize() : {};
+      // call resizeScreen if app not fullscreen
+      !document.fullscreenElement ? appContainer.resizeScreen() : {};
     });
     $("#fs-btn").on("click", () => {
+      // toggle fullscreen mode for renderer view element
       !document.fullscreenElement ? pixiApp.renderer.view.requestFullscreen() : document.exitFullscreen();
     });
     $("#db-btn").on("click", () => {
+      // toggle visibility of debug text
       pc._postext.visible = !pc._postext.visible;
     });
-
-    // set event listeners and handlers for application objects
+    $("#ar-sel").on("change", function () {
+      const ar = this.value; // get selected aspect ratio
+      appContainer.screen.ar = ar; // set screen aspect ratio
+      appContainer.resizeScreen(); // resize the screen
+    });
     pixiApp.renderer.view.onfullscreenchange = (event) => {
-      appContainer.onResize(document.fullscreenElement === event.target);
+      // call resizeScreen when renderer view element changes state
+      appContainer.resizeScreen(document.fullscreenElement === event.target);
     };
-    kbc.attachListenersAndHandlers();
+    kbc.attachListenersAndHandlers(); // attach keyboard controller listeners and handlers
 
-    // load resources
+    /** METHODS */
     PIXI.Loader.shared.add(assetsMap.resources); // use resource map to specify sprites to load
     PIXI.Loader.shared.load(loadComplete); // load sprites, calling loadComplete() once finished
   };
