@@ -39,6 +39,7 @@ var resolutionMap = {
       const resolution = resolutionMap.getNearest(targetWidth);
       pixiApp.renderer.resize(resolution.width, resolution.height);
       $("#res").html(`${resolution.width} x ${resolution.height}`);
+      if (Application.state == "running") setScene();
     },
   };
 
@@ -46,11 +47,7 @@ var resolutionMap = {
   var pc = {
     /** PIXI class instance members */
     _sprite: new PIXI.Sprite(), // PIXI.Sprite instance
-    _postext: new PIXI.Text("", { fontSize: 12 }), // PIXI.Text instance
-    addToStage: function () {
-      pixiApp.stage.addChild(pc._sprite); // add pc to the stage
-      pixiApp.stage.addChild(pc._postext); // add position text to the stage
-    },
+    _postext: new PIXI.Text("unknown", { fontSize: 12 }), // PIXI.Text instance
     /** State */
     direction: "up",
     /** Visibility */
@@ -74,7 +71,7 @@ var resolutionMap = {
       this._sprite.position.set(x, y);
       this._postext.text = `
         x: ${this._sprite.x}, y: ${this._sprite.y}, facing: ${this.direction}\n
-        ${kbc.eventCodeStack.map((x) => x.code).join(", ")}
+        eventStack: [${kbc.eventCodeStack.map((x) => x.code).join(", ")}]
       `;
     },
     /** Velocity */
@@ -96,6 +93,11 @@ var resolutionMap = {
       if (vx < 0 && vy > 0) this.direction = "down-left";
       if (vx < 0 && vy == 0) this.direction = "left";
     },
+  };
+
+  // create background object
+  var bg = {
+    _sprite: new PIXI.Sprite(),
   };
 
   // create new keyboard controller
@@ -123,6 +125,24 @@ var resolutionMap = {
 
   /** PRIVATE METHODS */
 
+  function Grid() {
+    PIXI.Container.call(this);
+    var grid = [];
+    for (var j = 0; j < 15; j++) {
+      grid[j] = [];
+      for (var i = 0; i < 10; i++) {
+        grid[j][i] = new PIXI.Graphics();
+        grid[j][i].drawRect(0, 0, 16, 16);
+        grid[j][i].position.x = 16 * i;
+        grid[j][i].position.y = 16 * j;
+        this.addChild(grid[j][i]);
+      }
+    }
+    this.grid = grid;
+  }
+  Grid.prototype = Object.create(PIXI.Container.prototype);
+  Grid.prototype.constructor = Grid;
+
   /**
    * Callback for PIXI Loader load() method. Sets the scene with the loaded assets.
    * @param {*} loader The loader instance.
@@ -130,20 +150,33 @@ var resolutionMap = {
    */
   function loadComplete(loader, resources) {
     for (const [name, _] of Object.entries(resources)) {
-      assetsMap.sprites[name] = new PIXI.Sprite(resources[name].texture); // load sprites from resource list
+      assetsMap.textures[name] = resources[name].texture; // save texture
     }
-    setScene(); // use loaded sprites to set the stage
+    appContainer.onResize(); // call onResize to resize pixi app
+    appContainer.$elem.empty().append(pixiApp.view); // add pixi app to the DOM
     Application.startGame(); // start the game!
   }
 
+  function setStage() {
+    bg._sprite = new PIXI.TilingSprite(assetsMap.textures["grass"]); // load bg sprite
+    pixiApp.stage.addChild(bg._sprite); // add background tile to stage
+    pc._sprite = new PIXI.Sprite(assetsMap.textures["man"]); // load pc sprite
+    pixiApp.stage.addChild(pc._sprite); // add pc to the stage
+    pixiApp.stage.addChild(pc._postext); // add position text to the stage
+  }
+
   function setScene() {
-    pc._sprite = assetsMap.sprites["man"]; // set pc sprite to man
+    const scw = pixiApp.renderer.screen.width; // screen width
+    const sch = pixiApp.renderer.screen.height; // screen height
+    /** Background */
+    bg._sprite.width = scw;
+    bg._sprite.height = sch;
+    bg._sprite.tileScale.set(scw / 240, sch / 160);
+    /** PC */
     pc._sprite.anchor.set(0.5, 1); // in center-bottom of body
-    pc.setPos(pixiApp.renderer.view.width / 2, pixiApp.renderer.view.height / 2); // put pc in the center of the screen
+    pc._sprite.scale.set(scw / 240, sch / 160);
+    pc.setPos(scw / 2, sch / 2); // put pc in the center of the screen
     pc.setVel(0, 0); // start pc not moving
-    pc.addToStage(); // add pc to the stage
-    appContainer.onResize(); // call onResize to resize pixi app
-    appContainer.$elem.empty().append(pixiApp.view); // add pixi app to the DOM
   }
 
   function drawScene(delta) {
@@ -152,7 +185,10 @@ var resolutionMap = {
 
   /** PUBLIC MEMBERS AND METHODS */
 
+  Application.state = "unloaded";
+
   Application.init = function () {
+    Application.state = "initializing";
     // attach event listeners and handlers to document elements
     $(window).on("resize", () => {
       !document.fullscreenElement ? appContainer.onResize() : {};
@@ -176,11 +212,15 @@ var resolutionMap = {
   };
 
   Application.startGame = function () {
-    pixiApp.ticker.add((delta) => drawScene(delta)); // start the ticker
+    Application.state = "running";
+    setStage(); // create and add sprites to the stage
+    setScene(); // position loaded sprites on the stage
+    pixiApp.ticker.add((delta) => drawScene(delta)); // start the scene ticker
   };
 
   Application.stopGame = function () {
-    pixiApp.ticket.stop(); // stop the ticker
+    Application.state = "stopped";
+    pixiApp.ticker.stop(); // stop the scene ticker
   };
 })((window.Application = window.Application || {}));
 
