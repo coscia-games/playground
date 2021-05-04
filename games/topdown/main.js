@@ -107,11 +107,6 @@ import { KeyboardController } from "../../modules/inputControllers.js";
   kbc.eventCodeMap.ArrowUp.down = () => pc.setVel(pc.vx, -1);
   kbc.eventCodeMap.KeyW.up = () => pc.setVel(pc.vx, 0);
   kbc.eventCodeMap.ArrowUp.up = () => pc.setVel(pc.vx, 0);
-  /** Right */
-  kbc.eventCodeMap.KeyD.down = () => pc.setVel(1, pc.vy);
-  kbc.eventCodeMap.ArrowRight.down = () => pc.setVel(1, pc.vy);
-  kbc.eventCodeMap.KeyD.up = () => pc.setVel(0, pc.vy);
-  kbc.eventCodeMap.ArrowRight.up = () => pc.setVel(0, pc.vy);
   /** Down */
   kbc.eventCodeMap.KeyS.down = () => pc.setVel(pc.vx, 1);
   kbc.eventCodeMap.ArrowDown.down = () => pc.setVel(pc.vx, 1);
@@ -122,6 +117,11 @@ import { KeyboardController } from "../../modules/inputControllers.js";
   kbc.eventCodeMap.ArrowLeft.down = () => pc.setVel(-1, pc.vy);
   kbc.eventCodeMap.KeyA.up = () => pc.setVel(0, pc.vy);
   kbc.eventCodeMap.ArrowLeft.up = () => pc.setVel(0, pc.vy);
+  /** Right */
+  kbc.eventCodeMap.KeyD.down = () => pc.setVel(1, pc.vy);
+  kbc.eventCodeMap.ArrowRight.down = () => pc.setVel(1, pc.vy);
+  kbc.eventCodeMap.KeyD.up = () => pc.setVel(0, pc.vy);
+  kbc.eventCodeMap.ArrowRight.up = () => pc.setVel(0, pc.vy);
 
   /** PRIVATE METHODS */
 
@@ -141,9 +141,10 @@ import { KeyboardController } from "../../modules/inputControllers.js";
 
   function setStage() {
     /** BACKGROUND */
-    bg._container.scale.y = Math.atan(Math.sin(30 * (Math.PI / 180))); // 2:1 pixel ratio => dimetric
+    // bg._container.scale.y = 0.5; // 0.5 => trimetric
+    bg._container.scale.y = Math.atan(Math.sin(30 * (Math.PI / 180))); // 0.463647609001 => 2:1 pixel ratio => dimetric
     pixiApp.stage.addChild(bg._container); // add container to stage
-    bg._sprite = new PIXI.TilingSprite(assetsMap.textures["grid"]); // load bg sprite
+    bg._sprite = new PIXI.TilingSprite(assetsMap.textures["grass"]); // load bg sprite
     bg._sprite.rotation = Math.PI / 4; // rotate background sprite
     bg._container.addChild(bg._sprite); // add tiling sprite to container
     /** PC */
