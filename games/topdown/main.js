@@ -1,12 +1,12 @@
-import { assetsMap } from "./assets/assets.map.js";
-import { resolutionMap } from "../../modules/resolution.map.js";
-import { KeyboardController } from "../../modules/inputControllers.js";
+import { Resolution } from "../../modules/display.js";
+import { KeyboardController } from "../../modules/inputs.js";
+import { GameState, GameEngine } from "../../modules/state.js";
 
 // create Application instance
 (function (Application) {
-  /** PRIVATE MEMBERS */
-
-  // create new pixi application
+  /**
+   * create new pixi application to run game
+   */
   var pixiApp = new PIXI.Application({
     antialias: false,
     backgroundColor: 0xf0ffff,
@@ -14,7 +14,9 @@ import { KeyboardController } from "../../modules/inputControllers.js";
     autoDensity: true,
   });
 
-  // create pixiApp container reference and methods
+  /**
+   * create app container reference and screen handler methods
+   */
   var appContainer = {
     $container: $("#appContainer"), // container element
     screen: {
@@ -27,77 +29,82 @@ import { KeyboardController } from "../../modules/inputControllers.js";
         return this._elem.height; // screen width
       },
       get tw() {
-        return this._elem.width / resolutionMap[this.ar].widths.slice(-1)[0]; // tile width
+        return this._elem.width / Resolution[this.ar].widths.slice(-1)[0]; // tile width
       },
       get th() {
-        return this._elem.height / resolutionMap[this.ar].heights.slice(-1)[0]; // tile height
+        return this._elem.height / Resolution[this.ar].heights.slice(-1)[0]; // tile height
+      },
+      resize: function (isFullscreen = false) {
+        const targetWidth = isFullscreen ? window.innerWidth : this.$container.width();
+        const r = Resolution.getNearest(this.screen.ar, targetWidth, window.innerHeight);
+        pixiApp.renderer.resize(r.width, r.height); // resize renderer
+        $("#res").html(`${r.width} x ${r.height}`); // update debug output
+        if (Application.state == "running") setScene(); // re-draw scene
       },
     },
-    resizeScreen: function (isFullscreen = false) {
-      const targetWidth = isFullscreen ? window.innerWidth : this.$container.width();
-      const r = resolutionMap.getNearest(this.screen.ar, targetWidth, window.innerHeight);
-      pixiApp.renderer.resize(r.width, r.height); // resize renderer
-      $("#res").html(`${r.width} x ${r.height}`); // update debug output
-      if (Application.state == "running") setScene(); // re-draw scene
-    },
   };
 
-  // create player character object to track state
-  var pc = {
-    /** PIXI class instance members */
-    _sprite: new PIXI.Sprite(), // PIXI.Sprite instance
-    _postext: new PIXI.Text("unknown", { fontSize: 12 }), // PIXI.Text instance
-    /** State */
-    direction: "up",
-    /** Visibility */
-    hide: function () {
-      this._sprite.visible = false;
+  /**
+   * create entities map
+   */
+  var entities = {
+    pc: {
+      /** PIXI class instance members */
+      _sprite: new PIXI.Sprite(), // PIXI.Sprite instance
+      _debug: new PIXI.Text("unknown", { fontSize: 12 }), // PIXI.Text instance
+      /** State */
+      get direction() {
+        if (this.vx < 0 && this.vy < 0) this.direction = "up-left";
+        if (this.vx == 0 && this.vy < 0) this.direction = "up";
+        if (this.vx > 0 && this.vy < 0) this.direction = "up-right";
+        if (this.vx > 0 && this.vy == 0) this.direction = "right";
+        if (this.vx > 0 && this.vy > 0) this.direction = "down-right";
+        if (this.vx == 0 && this.vy > 0) this.direction = "down";
+        if (this.vx < 0 && this.vy > 0) this.direction = "down-left";
+        if (this.vx < 0 && this.vy == 0) this.direction = "left";
+      },
+      get visible() {
+        return this._sprite.visible;
+      },
+      hide: function () {
+        this._sprite.visible = false;
+      },
+      show: function () {
+        this._sprite.visible = true;
+      },
+      /** Position */
+      get x() {
+        return this._sprite.x;
+      },
+      get y() {
+        return this._sprite.y;
+      },
+      setPos: function (x, y) {
+        this._sprite.position.set(x, y);
+        this._debug.text = `
+          name: pc,
+          x: ${this._sprite.x}, 
+          y: ${this._sprite.y}, 
+          facing: ${this.direction}, 
+          eventStack: [${kbc.eventCodeStack.map((x) => x.code).join(", ")}]
+        `;
+      },
+      /** Velocity */
+      get vx() {
+        return this._sprite.vx;
+      },
+      get vy() {
+        return this._sprite.vy;
+      },
+      setVel: function (vx, vy) {
+        this._sprite.vx = vx;
+        this._sprite.vy = vy;
+      },
     },
-    show: function () {
-      this._sprite.visible = true;
+    bg: {
+      _container: new PIXI.Container(),
+      _sprite: new PIXI.Sprite(),
     },
-    get visible() {
-      return this._sprite.visible;
-    },
-    /** Position */
-    get x() {
-      return this._sprite.x;
-    },
-    get y() {
-      return this._sprite.y;
-    },
-    setPos: function (x, y) {
-      this._sprite.position.set(x, y);
-      this._postext.text = `
-        x: ${this._sprite.x}, y: ${this._sprite.y}, facing: ${this.direction}\n
-        eventStack: [${kbc.eventCodeStack.map((x) => x.code).join(", ")}]
-      `;
-    },
-    /** Velocity */
-    get vx() {
-      return this._sprite.vx;
-    },
-    get vy() {
-      return this._sprite.vy;
-    },
-    setVel: function (vx, vy) {
-      this._sprite.vx = vx;
-      this._sprite.vy = vy;
-      if (vx < 0 && vy < 0) this.direction = "up-left";
-      if (vx == 0 && vy < 0) this.direction = "up";
-      if (vx > 0 && vy < 0) this.direction = "up-right";
-      if (vx > 0 && vy == 0) this.direction = "right";
-      if (vx > 0 && vy > 0) this.direction = "down-right";
-      if (vx == 0 && vy > 0) this.direction = "down";
-      if (vx < 0 && vy > 0) this.direction = "down-left";
-      if (vx < 0 && vy == 0) this.direction = "left";
-    },
-  };
-
-  // create background object
-  var bg = {
-    _container: new PIXI.Container(),
-    _sprite: new PIXI.Sprite(),
   };
 
   // create new keyboard controller
@@ -131,27 +138,27 @@ import { KeyboardController } from "../../modules/inputControllers.js";
    * @param {*} resources The resources texture map.
    */
   function loadComplete(loader, resources) {
-    for (const [name, _] of Object.entries(resources)) {
-      assetsMap.textures[name] = resources[name].texture; // save texture
-    }
-    appContainer.resizeScreen(); // resize pixi app screen
+    // for (const [name, _] of Object.entries(resources)) {
+    //   assetsMap.textures[name] = resources[name].texture; // save texture
+    // }
+    let sheet = resources["images/spritesheet.json"].spritesheet;
+    appContainer.screen.resize(); // resize pixi app screen
     appContainer.$container.empty().append(pixiApp.view); // add pixi app to the DOM
     Application.startGame(); // start the game!
   }
 
   function setStage() {
     /** BACKGROUND */
-    // bg._container.scale.y = 0.5; // 0.5 => trimetric
-    bg._container.scale.y = Math.atan(Math.sin(30 * (Math.PI / 180))); // 0.463647609001 => 2:1 pixel ratio => dimetric
-    pixiApp.stage.addChild(bg._container); // add container to stage
     bg._sprite = new PIXI.TilingSprite(assetsMap.textures["grass"]); // load bg sprite
     bg._sprite.rotation = Math.PI / 4; // rotate background sprite
     bg._container.addChild(bg._sprite); // add tiling sprite to container
+    bg._container.scale.y = Math.atan(Math.sin(30 * (Math.PI / 180))); // 0.463647609001 => 2:1 pixel ratio => dimetric
+    pixiApp.stage.addChild(bg._container); // add container to stage
     /** PC */
     pc._sprite = new PIXI.Sprite(assetsMap.textures["man"]); // load pc sprite
     pc._sprite.anchor.set(0.5, 1); // in center-bottom of body
     pixiApp.stage.addChild(pc._sprite); // add pc to the stage
-    pixiApp.stage.addChild(pc._postext); // add position text to the stage
+    pixiApp.stage.addChild(pc._debug); // add position text to the stage
   }
 
   function setScene() {
@@ -180,8 +187,8 @@ import { KeyboardController } from "../../modules/inputControllers.js";
 
     /** LISTENERS & HANDLERS */
     $(window).on("resize", () => {
-      // call resizeScreen if app not fullscreen
-      !document.fullscreenElement ? appContainer.resizeScreen() : {};
+      // call screen.resize if app not fullscreen
+      !document.fullscreenElement ? appContainer.screen.resize() : {};
     });
     $("#fs-btn").on("click", () => {
       // toggle fullscreen mode for renderer view element
@@ -189,28 +196,29 @@ import { KeyboardController } from "../../modules/inputControllers.js";
     });
     $("#db-btn").on("click", () => {
       // toggle visibility of debug text
-      pc._postext.visible = !pc._postext.visible;
+      pc._debug.visible = !pc._debug.visible;
     });
     $("#ar-sel").on("change", function () {
       const ar = this.value; // get selected aspect ratio
       appContainer.screen.ar = ar; // set screen aspect ratio
-      appContainer.resizeScreen(); // resize the screen
+      appContainer.screen.resize(); // resize the screen
     });
     pixiApp.renderer.view.onfullscreenchange = (event) => {
-      // call resizeScreen when renderer view element changes state
-      appContainer.resizeScreen(document.fullscreenElement === event.target);
+      // call screen.resize when renderer view element changes state
+      appContainer.screen.resize(document.fullscreenElement === event.target);
     };
     kbc.attachListenersAndHandlers(); // attach keyboard controller listeners and handlers
 
     /** METHODS */
-    PIXI.Loader.shared.add(assetsMap.resources); // use resource map to specify sprites to load
+    // PIXI.Loader.shared.add(assetsMap.resources); // use resource map to specify sprites to load
+    PIXI.Loader.shared.add("assets/spritesheet.json"); // load spritesheet
     PIXI.Loader.shared.load(loadComplete); // load sprites, calling loadComplete() once finished
   };
 
   Application.startGame = function () {
-    Application.state = "running";
     setStage(); // create and add sprites to the stage
     setScene(); // position loaded sprites on the stage
+    Application.state = "running";
     pixiApp.ticker.add((delta) => drawScene(delta)); // start the scene ticker
   };
 

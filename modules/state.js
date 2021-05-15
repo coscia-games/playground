@@ -1,4 +1,4 @@
-class abstractGameState {
+export class GameState {
   constructor() {
     const methods = [
       // Setup and destroy the state
@@ -21,7 +21,7 @@ class abstractGameState {
   }
 }
 
-class abstractGameEngine {
+export class GameEngine {
   states; // the stack of states
   running; // bool whether game is running or not
 

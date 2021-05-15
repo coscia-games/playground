@@ -1,4 +1,7 @@
-export const resolutionMap = {
+/**
+ * Map of common resolutions.
+ */
+export const Resolution = {
   "16:9": {
     widths: [3840, 2560, 1920, 1600, 1280, 1024, 854, 640, 512, 426, 384, 256],
     heights: [2160, 1440, 1080, 900, 720, 576, 480, 360, 288, 240, 216, 144],
@@ -14,7 +17,7 @@ export const resolutionMap = {
   /**
    * Gets closest width and height for requested aspect ratio to the target
    * width, rounded down.
-   * @param {String} ar Aspect Ratio, e.g., 16:9, 4:3, 3:2
+   * @param {String} ar Aspect Ratio => {16:9, 4:3, 3:2}
    * @param {Number} tw Target Width, usually the size of the app container
    * @param {Number} th Target Height, usually the innerHeight of the window
    * @returns [width, height] in px
