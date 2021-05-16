@@ -2,6 +2,8 @@ import { Resolution } from "../../modules/display.js";
 import { KeyboardController } from "../../modules/inputs.js";
 import { GameState, GameEngine } from "../../modules/state.js";
 
+PIXI.settings.ROUND_PIXELS = true; // stop pixel interpolation
+
 // create Application instance
 (function (Application) {
   /**
@@ -28,12 +30,6 @@ import { GameState, GameEngine } from "../../modules/state.js";
       get h() {
         return this._elem.height; // screen width
       },
-      get tw() {
-        return this._elem.width / Resolution[this.ar].widths.slice(-1)[0]; // tile width
-      },
-      get th() {
-        return this._elem.height / Resolution[this.ar].heights.slice(-1)[0]; // tile height
-      },
       resize: function (isFullscreen = false) {
         const targetWidth = isFullscreen ? window.innerWidth : appContainer.$container.width();
         const r = Resolution.getNearest(this.ar, targetWidth, window.innerHeight);
@@ -48,14 +44,34 @@ import { GameState, GameEngine } from "../../modules/state.js";
    * create assets map
    */
   var assets = {
+    scaleFactor: Math.atan(Math.sin(30 * (Math.PI / 180))), // 0.463647609001 => 2:1 pixel ratio => dimetric
     sheet: {},
-    textures: {},
   };
 
   /**
    * create entities map
    */
   var entities = {
+    container: new PIXI.Container(),
+    background: {
+      /** PIXI class instance members */
+      _tilemap: new PIXI.TilingSprite(),
+      get w() {
+        return this._tilemap.width;
+      },
+      get h() {
+        return this._tilemap.height;
+      },
+      get tw() {
+        return appContainer.screen._elem.width / Resolution[appContainer.screen.ar].widths.slice(-1)[0]; // tile width
+      },
+      get th() {
+        return appContainer.screen._elem.height / Resolution[appContainer.screen.ar].heights.slice(-1)[0]; // tile height
+      },
+      setPos: function (x, y) {
+        this._tilemap.position.set(x, y);
+      },
+    },
     player: {
       /** PIXI class instance members */
       _sprite: new PIXI.Sprite(), // PIXI.Sprite instance
@@ -107,10 +123,6 @@ import { GameState, GameEngine } from "../../modules/state.js";
         this._sprite.vy = vy;
       },
     },
-    background: {
-      _container: new PIXI.Container(),
-      _sprite: new PIXI.Sprite(),
-    },
   };
 
   // create new keyboard controller
@@ -124,46 +136,54 @@ import { GameState, GameEngine } from "../../modules/state.js";
    * @param {*} resources The resources texture map.
    */
   function loadComplete(loader, resources) {
-    // for (const [name, _] of Object.entries(resources)) {
-    //   assets.textures[name] = resources[name].texture; // save texture
-    // }
     assets.sheet = resources["assets/spritesheet.json"].spritesheet;
     appContainer.screen.resize(); // resize pixi app screen
     appContainer.$container.empty().append(pixiApp.view); // add pixi app to the DOM
     Application.startGame(); // start the game!
   }
 
+  /**
+   * Create sprites and add them to the stage.
+   */
   function setStage() {
-    /** BACKGROUND */
     let bg = entities.background; // alias
-    bg._sprite = new PIXI.TilingSprite(assets.sheet.textures["grass.png"]); // load background sprite
-    bg._sprite.rotation = Math.PI / 4; // rotate background sprite
-    bg._container.addChild(bg._sprite); // add tiling sprite to container
-    bg._container.scale.y = Math.atan(Math.sin(30 * (Math.PI / 180))); // 0.463647609001 => 2:1 pixel ratio => dimetric
-    pixiApp.stage.addChild(bg._container); // add container to stage
-    /** PC */
     let pc = entities.player; // alias
+
+    entities.container.scale.y = assets.scaleFactor; // apply scale factor to container holding entities
+
+    bg._tilemap = new PIXI.TilingSprite(assets.sheet.textures["grass.png"]); // load background sprite into tilemap
+    bg._tilemap.width = appContainer.screen.w; // set tilemap width
+    bg._tilemap.height = appContainer.screen.h; // set tilemap height
+    bg._tilemap.tileScale.set(bg.tw, bg.th); // scale sprites to tile width/height
+    bg._tilemap.rotation = Math.PI / 4; // rotate tilemap 90 degrees
+
     pc._sprite = new PIXI.Sprite(assets.sheet.textures["man.png"]); // load pc sprite
     pc._sprite.anchor.set(0.5, 1); // in center-bottom of body
-    pixiApp.stage.addChild(pc._sprite); // add pc to the stage
+    pc._sprite.scale.set(bg.tw, bg.th); // scale pc to tile width/height
+
+    /** Add to the stage */
+    bg._tilemap.addChild(pc._sprite); // add pc to background tilemap
+    entities.container.addChild(bg._tilemap); // add tilemap to entities container
+    pixiApp.stage.addChild(entities.container); // add container to stage
     pixiApp.stage.addChild(pc._debug); // add position text to the stage
   }
 
+  /**
+   * Position sprites and set state.
+   */
   function setScene() {
-    /** BACKGROUND */
-    let bg = entities.background; // alias
-    bg._container.position.set(appContainer.screen.w / 2, appContainer.screen.h / 2);
-    bg._sprite.width = appContainer.screen.w;
-    bg._sprite.height = appContainer.screen.h;
-    bg._sprite.tileScale.set(appContainer.screen.tw, appContainer.screen.th); // scale bg sprites to tile width/height
-    /** PC */
     let pc = entities.player; // alias
-    pc._sprite.scale.set(appContainer.screen.tw, appContainer.screen.th); // scale pc to tile width/height
-    pc.setPos(appContainer.screen.w / 2, appContainer.screen.h / 2); // put pc in the center of the screen
+    let bg = entities.background; // alias
+    bg.setPos(appContainer.screen.w / 2, appContainer.screen.h / 2); // put bg in the center of the screen
+    pc.setPos(bg.w / 2, bg.h / 2); // put pc in the center of the tilemap
     pc.setVel(0, 0); // start pc not moving
   }
 
-  function drawScene(delta) {
+  /**
+   * Update scene every tick.
+   * @param {*} delta
+   */
+  function startShow(delta) {
     let pc = entities.player; // alias
     pc.setPos(pc.x + pc.vx, pc.y + pc.vy); // update pc position using velocity
   }
@@ -179,20 +199,20 @@ import { GameState, GameEngine } from "../../modules/state.js";
     /** CONTROLS */
     let pc = entities.player; // alias
     kbc.eventCodeMap.KeyW.down = () => pc.setVel(pc.vx, -1);
-    kbc.eventCodeMap.ArrowUp.down = () => pc.setVel(pc.vx, -1);
     kbc.eventCodeMap.KeyW.up = () => pc.setVel(pc.vx, 0);
+    kbc.eventCodeMap.ArrowUp.down = () => pc.setVel(pc.vx, -1);
     kbc.eventCodeMap.ArrowUp.up = () => pc.setVel(pc.vx, 0);
     kbc.eventCodeMap.KeyS.down = () => pc.setVel(pc.vx, 1);
-    kbc.eventCodeMap.ArrowDown.down = () => pc.setVel(pc.vx, 1);
     kbc.eventCodeMap.KeyS.up = () => pc.setVel(pc.vx, 0);
+    kbc.eventCodeMap.ArrowDown.down = () => pc.setVel(pc.vx, 1);
     kbc.eventCodeMap.ArrowDown.up = () => pc.setVel(pc.vx, 0);
     kbc.eventCodeMap.KeyA.down = () => pc.setVel(-1, pc.vy);
-    kbc.eventCodeMap.ArrowLeft.down = () => pc.setVel(-1, pc.vy);
     kbc.eventCodeMap.KeyA.up = () => pc.setVel(0, pc.vy);
+    kbc.eventCodeMap.ArrowLeft.down = () => pc.setVel(-1, pc.vy);
     kbc.eventCodeMap.ArrowLeft.up = () => pc.setVel(0, pc.vy);
     kbc.eventCodeMap.KeyD.down = () => pc.setVel(1, pc.vy);
-    kbc.eventCodeMap.ArrowRight.down = () => pc.setVel(1, pc.vy);
     kbc.eventCodeMap.KeyD.up = () => pc.setVel(0, pc.vy);
+    kbc.eventCodeMap.ArrowRight.down = () => pc.setVel(1, pc.vy);
     kbc.eventCodeMap.ArrowRight.up = () => pc.setVel(0, pc.vy);
 
     /** LISTENERS & HANDLERS */
@@ -220,7 +240,6 @@ import { GameState, GameEngine } from "../../modules/state.js";
     kbc.attachListenersAndHandlers(); // attach keyboard controller listeners and handlers
 
     /** METHODS */
-    // PIXI.Loader.shared.add(assets.resources); // use resource map to specify sprites to load
     PIXI.Loader.shared.add("assets/spritesheet.json"); // load spritesheet
     PIXI.Loader.shared.load(loadComplete); // load sprites, calling loadComplete() once finished
   };
@@ -229,7 +248,7 @@ import { GameState, GameEngine } from "../../modules/state.js";
     setStage(); // create and add sprites to the stage
     setScene(); // position loaded sprites on the stage
     Application.state = "running";
-    pixiApp.ticker.add((delta) => drawScene(delta)); // start the scene ticker
+    pixiApp.ticker.add((delta) => startShow(delta)); // start the scene ticker
   };
 
   Application.stopGame = function () {
