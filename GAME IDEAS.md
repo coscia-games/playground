@@ -22,3 +22,28 @@ A fighting game with pixel characters that lose pixels when they get hurt!
 
 A proof-of-concept game idea where you take a picture, then the game transforms the environment that you took a picture of into a simple platformer.
 It draws on the classic children's make-believe genre.
+
+## Terrarium Builder
+
+You have these `n x n x n` cubes that you can fill with material and create terrariums for small creatures.
+The game is to build the terrariums so that your creatures don't die.
+
+- In the editor, you should restrict editing to a single plane:
+
+```
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+ -> |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+    +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+```
