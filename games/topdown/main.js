@@ -18,7 +18,14 @@ PIXI.utils.skipHello(); // stop logging version info to console
   });
 
   /**
-   * stores display attributes and controller I/O functions
+   * stores all raw data for sprites, level data, etc.
+   */
+  var assets = {
+    sheet: {}, // map of sheet textures for creating sprites
+  };
+
+  /**
+   * handles display attributes and controller I/O functions
    */
   var console = {
     display: {
@@ -44,13 +51,6 @@ PIXI.utils.skipHello(); // stop logging version info to console
     io: {
       keyboardController: new KeyboardController(), // create new keyboard controller
     },
-  };
-
-  /**
-   * holds raw data for sprites, levels, and other game features
-   */
-  var assets = {
-    sheet: {}, // map of sheet textures for creating sprites
   };
 
   /**
@@ -140,57 +140,45 @@ PIXI.utils.skipHello(); // stop logging version info to console
   /** PRIVATE METHODS */
 
   /**
-   * Callback for PIXI Loader load() method. Sets the scene with the loaded assets.
-   * @param {*} loader The loader instance.
-   * @param {*} resources The resources texture map.
-   */
-  function loadComplete(loader, resources) {
-    assets.sheet = resources["assets/spritesheet.json"].spritesheet;
-    console.display.screen.resize(); // resize console screen after loading assets
-    console.display.$container.empty().append(pixiApp.view); // add pixi app to the DOM
-    Application.startGame(); // start the game!
-  }
-
-  /**
    * Create sprites and add them to the stage.
    */
   function setStage() {
-    const BGL = graphics.layers.background; // layer alias
-    const OBL = graphics.layers.object; // layer alias
+    const BGL = graphics.layers.background; // background graphics layer (BGL)
+    const OGL = graphics.layers.object; // object graphics layer (OGL)
 
     // create Pixi Sprites from assets data
     BGL.tilemap._sprite = new PIXI.TilingSprite(assets.sheet.textures["grass.png"]);
-    OBL.player._sprite = new PIXI.Sprite(assets.sheet.textures["man.png"]);
+    OGL.player._sprite = new PIXI.Sprite(assets.sheet.textures["man.png"]);
 
     // background layer sprites
     BGL.tilemap._sprite.width = console.display.screen.w; // set tilemap width
     BGL.tilemap._sprite.height = console.display.screen.h; // set tilemap height
 
     // object layer sprites
-    OBL.player._sprite.anchor.set(0.5, 1); // in center-bottom of body
+    OGL.player._sprite.anchor.set(0.5, 1); // in center-bottom of body
 
     // scale sprites
     BGL.tilemap._sprite.tileScale.set(BGL.tilemap.tw, BGL.tilemap.th); // scale sprite to tile width and height
-    OBL.player._sprite.scale.set(BGL.tilemap.tw, BGL.tilemap.th); // scale pc sprite to background tile width and height
+    OGL.player._sprite.scale.set(BGL.tilemap.tw, BGL.tilemap.th); // scale pc sprite to background tile width and height
 
     // scale each layer container to achieve 2:1 dimetric perspective
     BGL._container.scale.y = graphics.settings.scaleFactor;
-    OBL._container.scale.y = graphics.settings.scaleFactor;
+    OGL._container.scale.y = graphics.settings.scaleFactor;
 
     // rotate sprites 90 degrees to get angled 3D projection perspective
     BGL.tilemap._sprite.rotation = Math.PI / 4;
-    OBL.player._sprite.rotation = Math.PI / 4;
+    OGL.player._sprite.rotation = Math.PI / 4;
 
     // add sprites to background layer
     BGL._container.addChild(BGL.tilemap._sprite);
 
     // add sprites to object layer
-    OBL._container.addChild(OBL.player._sprite);
+    OGL._container.addChild(OGL.player._sprite);
 
     // add containers to pixiApp stage
     pixiApp.stage.addChild(BGL._container);
-    pixiApp.stage.addChild(OBL._container);
-    pixiApp.stage.addChild(OBL.player._debug); // add debug directly to the screen
+    pixiApp.stage.addChild(OGL._container);
+    pixiApp.stage.addChild(OGL.player._debug); // add debug directly to the screen
   }
 
   /**
@@ -268,7 +256,12 @@ PIXI.utils.skipHello(); // stop logging version info to console
 
     /** METHODS */
     PIXI.Loader.shared.add("assets/spritesheet.json"); // load spritesheet
-    PIXI.Loader.shared.load(loadComplete); // load sprites, calling loadComplete() once finished
+    PIXI.Loader.shared.load(function (loader, resources) {
+      assets.sheet = resources["assets/spritesheet.json"].spritesheet;
+      console.display.screen.resize(); // resize console screen after loading assets
+      console.display.$container.empty().append(pixiApp.view); // add pixi app to the DOM
+      Application.startGame(); // start the game!
+    }); // load sprites
   };
 
   Application.startGame = function () {
