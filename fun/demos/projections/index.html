@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="title">Adam Coscia &mdash; Projections</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Adam Coscia" />
+    <meta
+      name="description"
+      content="I am a human-centered computing PhD student at Georgia Tech studying visual analytics and human-computer interaction."
+    />
+    <meta
+      name="keywords"
+      content="phd,visual analytics,georgia tech,interactive computing,sensemaking,information visualization,infovis,infoviz,data science,machine learning,semantic interaction,data manipulation,cognitive bias"
+    />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles/fun.css" />
+    <style>
+      /* TOP-LEVEL */
+      .flex-row {
+        font-family: "Quicksand";
+        padding: 2rem;
+      }
+
+      /* INSTRUCTIONS */
+      .instructions-container {
+        padding: 0 1rem;
+        flex: 1;
+        min-width: 225px;
+      }
+      .title {
+        font-family: "Press Start 2P", cursive;
+      }
+      #projectionSelector {
+        font: inherit;
+      }
+
+      /* GAME CONTAINER */
+      .game-container {
+        padding: 0 1rem;
+        flex: 2;
+        min-width: 200px;
+      }
+      #board {
+        margin: auto;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body style="touch-action: manipulation">
+    <div class="flex-row text-center">
+      <!-- INSTRUCTIONS -->
+      <div class="instructions-container">
+        <!-- HEADER -->
+        <header class="title">
+          <h1>Projections</h1>
+        </header>
+
+        <!-- INFO -->
+        <div class="info">
+          <p>Set the projection style.</p>
+        </div>
+
+        <!-- SELECTOR -->
+        <select id="projectionSelector">
+          <option value="PixelBimetric">Pixel Bimetric</option>
+          <option value="PixelTrimetric">Pixel Trimetric</option>
+          <option value="Isometric">Isometric</option>
+          <option value="Bimetric">Bimetric</option>
+          <option value="Trimetric">Trimetric</option>
+          <option value="Military">Military</option>
+          <option value="Cavalier">Cavalier</option>
+          <option value="TopDown">Top Down</option>
+        </select>
+      </div>
+
+      <!-- GAME -->
+      <div class="game-container">
+        <canvas id="board"></canvas>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="/vendors/jQuery/jquery-3.6.0.min.js"></script>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

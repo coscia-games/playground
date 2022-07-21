@@ -1,0 +1,79 @@
+/* GENERAL */
+.flex-row {
+    font-size: clamp(0.5rem, 0.3rem + 1vw, 1.9rem);
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+  .divider {
+    width: 50%;
+    margin: 1rem auto;
+  }
+  .text-center {
+    text-align: center;
+  }
+  
+  /* INFO */
+  #info {
+    min-width: 230px;
+    max-width: 70%;
+    margin: auto;
+    text-transform: none;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+  #info ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  /* CARDS */
+  img {
+    max-width: 100%;
+    min-width: 100%;
+  }
+  .card-grid {
+    margin: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+    grid-gap: 1rem;
+  }
+  .card {
+    text-align: center;
+    padding: 0.5rem;
+    border: 2px solid transparent;
+    border-radius: 4px;
+  }
+  .card:hover {
+    border-color: lightgrey;
+  }
+  
+  /* KEYPAD */
+  .keypad {
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .keypad td {
+    font-family: "Press Start 2P", cursive;
+    font-size: 2em;
+    cursor: pointer;
+    width: 30%;
+    height: 0;
+    border: 1px solid black;
+  }
+  .keypad td:after,
+  .keypad td:before {
+    content: "";
+    display: block;
+    padding-bottom: calc(50% - 0.5em);
+  }
+  .keypad td:hover {
+    background-color: gainsboro;
+  }
+  .keypad td:active {
+    background-color: grey;
+  }
+  

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="title">Adam Coscia &mdash; 2D Side-Scroller</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Adam Coscia" />
+    <meta
+      name="description"
+      content="I am a human-centered computing PhD student at Georgia Tech studying visual analytics and human-computer interaction."
+    />
+    <meta
+      name="keywords"
+      content="phd,visual analytics,georgia tech,interactive computing,sensemaking,information visualization,infovis,infoviz,data science,machine learning,semantic interaction,data manipulation,cognitive bias"
+    />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles/fun.css" />
+    <style>
+      .flex-row {
+        font-family: "Quicksand";
+        padding: 2rem;
+      }
+      .instructions-container {
+        padding: 0 1rem;
+        flex: 1;
+        min-width: 225px;
+      }
+      .title {
+        font-family: "Press Start 2P", cursive;
+      }
+      .game-container {
+        padding: 0 1rem;
+        flex: 1.5;
+        min-width: 200px;
+      }
+      #board {
+        margin: auto;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body style="touch-action: manipulation">
+    <div class="flex-row text-center">
+      <!-- INSTRUCTIONS -->
+      <div class="instructions-container">
+        <!-- HEADER -->
+        <header class="title">
+          <h1>2D Side-Scroller</h1>
+        </header>
+
+        <!-- INFO -->
+        <div class="info">
+          <p>
+            Move by pressing the below arrows
+            <br />
+            or using your keyboard arrow keys!
+          </p>
+        </div>
+
+        <!-- KEY PAD -->
+        <table class="keypad">
+          <tbody>
+            <tr>
+              <td style="background-color: white; cursor: default; border: none"></td>
+              <td id="uparrow">&#x21e7;</td>
+              <td style="background-color: white; cursor: default; border: none"></td>
+            </tr>
+            <tr>
+              <td id="leftarrow">&#x21e6;</td>
+              <td id="downarrow">&#x21e9;</td>
+              <td id="rightarrow">&#x21e8;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GAME -->
+      <div class="game-container">
+        <canvas id="board"></canvas>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="main.js"></script>
+  </body>
+</html>

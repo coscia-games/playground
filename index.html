@@ -1,166 +1,187 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Coscia Creations</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
+    <link rel="stylesheet" href="/styles/main.css" />
+    <style>
+      img {
+        max-width: 100%;
+        min-width: 100%;
+      }
+      .wrapper {
+        margin: 2rem 0;
+      }
+      .grid {
+        display: grid;
+        grid-gap: 0.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      }
+    </style>
+  </head>
 
-<head>
-  <title>Coscia Creations</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <!-- Icons -->
-  <link rel="manifest" href="/site.webmanifest" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-    crossorigin="anonymous" />
-  <!-- Bootstrap - CSS only -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
-  <!-- Bootstrap - JavaScript Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous">
-  </script>
-  <!-- Global CSS -->
-  <link rel="stylesheet" href="global.css" />
-  <!-- Local CSS -->
-  <link rel="stylesheet" href="main.css" />
-</head>
-
-<body class="wrapper">
-  <div class="container">
-    <!-- HEADER -->
-    <div class="row center-all">
-      <div class="col-1">
-        <img src="android-chrome-512x512.png" alt="logo" />
+  <body class="wrapper">
+    <div class="container">
+      <!-- HEADER -->
+      <div class="row center-all">
+        <div class="col-1">
+          <img src="/assets/images/logo.png" alt="logo" style="width: 64px; height: 64px" />
+        </div>
+        <div class="col-11">
+          <header>
+            <h1>Coscia Creations</h1>
+          </header>
+        </div>
       </div>
-      <div class="col-11">
-        <header>
-          <h1>Coscia Creations</h1>
-        </header>
+
+      <hr />
+
+      <!-- Games -->
+      <div class="row">
+        <div class="col">
+          <!-- Info -->
+          <header style="margin-bottom: 1rem">
+            <h2>Games</h2>
+          </header>
+
+          <!-- Content -->
+          <div class="grid">
+            <!-- Snake -->
+            <div class="card">
+              <div class="card-header">
+                <strong>Snake</strong>
+                &nbsp;
+                <a href="/fun/games/snake/index.html" target="_blank">
+                  <span class="fa fa-play" style="color: seagreen"></span>
+                </a>
+              </div>
+              <div class="card-body">
+                <img
+                  src="/fun/games/snake/teaser.png"
+                  alt="snake"
+                  style="cursor: pointer"
+                  onclick="window.location = '/fun/games/snake/index.html'"
+                />
+              </div>
+            </div>
+
+            <!-- Top Down -->
+            <div class="card">
+              <div class="card-header">
+                <strong>Top Down</strong>
+                &nbsp;
+                <a href="/fun/games/topdown/index.html" target="_blank">
+                  <span class="fa fa-play" style="color: seagreen"></span>
+                </a>
+              </div>
+              <div class="card-body">
+                <img
+                  src="/fun/games/topdown/teaser.png"
+                  alt="topdown"
+                  style="cursor: pointer"
+                  onclick="window.location = '/fun/games/topdown/index.html'"
+                />
+              </div>
+            </div>
+
+            <!-- Platformer -->
+            <div class="card">
+              <div class="card-header">
+                <strong>Platformer</strong>
+                &nbsp;
+                <a href="/fun/games/platformer/index.html" target="_blank">
+                  <span class="fa fa-play" style="color: seagreen"></span>
+                </a>
+              </div>
+              <div class="card-body">
+                <img
+                  src="/fun/games/platformer/teaser.png"
+                  alt="platformer"
+                  style="cursor: pointer"
+                  onclick="window.location = '/fun/games/platformer/index.html'"
+                />
+              </div>
+            </div>
+
+            <!-- 2D Side-Scroller -->
+            <div class="card">
+              <div class="card-header">
+                <strong>2D Side-Scroller</strong>
+                &nbsp;
+                <a href="/fun/games/scroller/index.html" target="_blank">
+                  <span class="fa fa-play" style="color: seagreen"></span>
+                </a>
+              </div>
+              <div class="card-body">
+                <img
+                  src="/fun/games/scroller/teaser.png"
+                  alt="scroller"
+                  style="cursor: pointer"
+                  onclick="window.location = '/fun/games/scroller/index.html'"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <hr />
+      <br />
 
-    <!-- Games -->
-    <div class="row">
-      <div class="col">
-        <!-- Info -->
-        <header style="margin-bottom: 1rem">
-          <h2>Games</h2>
-        </header>
+      <!-- Demos -->
+      <div class="row">
+        <div class="col">
+          <!-- Info -->
+          <header style="margin-bottom: 1rem">
+            <h2>Demos</h2>
+          </header>
 
-        <!-- Content -->
-        <div class="grid">
-          <!-- Snake -->
-          <div class="card">
-            <div class="card-header">
-              <strong>Snake</strong>
-              &nbsp;
-              <a href="/games/snake/index.html" target="_blank">
-                <span class="fa fa-play" style="color: seagreen"></span>
-              </a>
+          <!-- Content -->
+          <div class="grid">
+            <!-- Projections -->
+            <div class="card">
+              <div class="card-header">
+                <strong>Projections</strong>
+                &nbsp;
+                <a href="/fun/demos/projections/index.html" target="_blank">
+                  <span class="fa fa-play" style="color: seagreen"></span>
+                </a>
+              </div>
+              <div class="card-body">
+                <img
+                  src="/fun/demos/projections/teaser.png"
+                  alt="projections"
+                  style="cursor: pointer"
+                  onclick="window.location = '/fun/demos/projections/index.html'"
+                />
+              </div>
             </div>
-            <div class="card-body">
-              <img src="/games/snake/teaser.png" alt="snake" style="cursor: pointer"
-                onclick="window.location = '/games/snake/index.html'" />
-            </div>
-          </div>
 
-          <!-- Top Down -->
-          <div class="card">
-            <div class="card-header">
-              <strong>Top Down</strong>
-              &nbsp;
-              <a href="/games/topdown/index.html" target="_blank">
-                <span class="fa fa-play" style="color: seagreen"></span>
-              </a>
-            </div>
-            <div class="card-body">
-              <img src="/games/topdown/teaser.png" alt="topdown" style="cursor: pointer"
-                onclick="window.location = '/games/topdown/index.html'" />
-            </div>
-          </div>
-
-          <!-- Platformer -->
-          <div class="card">
-            <div class="card-header">
-              <strong>Platformer</strong>
-              &nbsp;
-              <a href="/games/platformer/index.html" target="_blank">
-                <span class="fa fa-play" style="color: seagreen"></span>
-              </a>
-            </div>
-            <div class="card-body">
-              <img src="/games/platformer/teaser.png" alt="platformer" style="cursor: pointer"
-                onclick="window.location = '/games/platformer/index.html'" />
-            </div>
-          </div>
-
-          <!-- 2D Side-Scroller -->
-          <div class="card">
-            <div class="card-header">
-              <strong>2D Side-Scroller</strong>
-              &nbsp;
-              <a href="/games/scroller/index.html" target="_blank">
-                <span class="fa fa-play" style="color: seagreen"></span>
-              </a>
-            </div>
-            <div class="card-body">
-              <img src="/games/scroller/teaser.png" alt="scroller" style="cursor: pointer"
-                onclick="window.location = '/games/scroller/index.html'" />
+            <!-- Analog Clock -->
+            <div class="card">
+              <div class="card-header">
+                <strong>Analog Clock</strong>
+                &nbsp;
+                <a href="/fun/demos/clock/index.html" target="_blank">
+                  <span class="fa fa-play" style="color: seagreen"></span>
+                </a>
+              </div>
+              <div class="card-body">
+                <img
+                  src="/fun/demos/clock/teaser.png"
+                  alt="clock"
+                  style="cursor: pointer"
+                  onclick="window.location = '/fun/demos/clock/index.html'"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <br />
-
-    <!-- Demos -->
-    <div class="row">
-      <div class="col">
-        <!-- Info -->
-        <header style="margin-bottom: 1rem">
-          <h2>Demos</h2>
-        </header>
-
-        <!-- Content -->
-        <div class="grid">
-          <!-- Projections -->
-          <div class="card">
-            <div class="card-header">
-              <strong>Projections</strong>
-              &nbsp;
-              <a href="/demos/projections/index.html" target="_blank">
-                <span class="fa fa-play" style="color: seagreen"></span>
-              </a>
-            </div>
-            <div class="card-body">
-              <img src="/demos/projections/teaser.png" alt="projections" style="cursor: pointer"
-                onclick="window.location = '/demos/projections/index.html'" />
-            </div>
-          </div>
-
-          <!-- Analog Clock -->
-          <div class="card">
-            <div class="card-header">
-              <strong>Analog Clock</strong>
-              &nbsp;
-              <a href="/demos/clock/index.html" target="_blank">
-                <span class="fa fa-play" style="color: seagreen"></span>
-              </a>
-            </div>
-            <div class="card-body">
-              <img src="/demos/clock/teaser.png" alt="clock" style="cursor: pointer"
-                onclick="window.location = '/demos/clock/index.html'" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
-
+  </body>
 </html>

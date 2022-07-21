@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="title">Adam Coscia &mdash; Snake</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Adam Coscia" />
+    <meta
+      name="description"
+      content="I am a human-centered computing PhD student at Georgia Tech studying visual analytics and human-computer interaction."
+    />
+    <meta
+      name="keywords"
+      content="phd,visual analytics,georgia tech,interactive computing,sensemaking,information visualization,infovis,infoviz,data science,machine learning,semantic interaction,data manipulation,cognitive bias"
+    />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles/fun.css" />
+    <style>
+      .flex-row {
+        font-family: "Quicksand";
+        padding: 2rem;
+      }
+      .instructions-container {
+        padding: 0 1rem;
+        flex: 1;
+        min-width: 225px;
+      }
+      .title,
+      .difficulty {
+        font-family: "Press Start 2P", cursive;
+      }
+      #stateButton {
+        font: inherit;
+        font-family: "Press Start 2P", cursive;
+      }
+      .slidecontainer {
+        width: 100%;
+        margin-block-end: 0.5em;
+      }
+      .slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 25px;
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: 0.2s;
+        transition: opacity 0.2s;
+      }
+      .slider:hover {
+        opacity: 1;
+      }
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        background: #4caf50;
+        cursor: pointer;
+      }
+      .slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        background: #4caf50;
+        cursor: pointer;
+      }
+      .game-container {
+        padding: 0 1rem;
+        flex: 1.5;
+        min-width: 200px;
+      }
+      #board {
+        margin: auto;
+        display: block;
+      }
+      .scoreboard {
+        margin-top: 1rem;
+        font-family: "Press Start 2P", cursive;
+      }
+    </style>
+  </head>
+
+  <body style="touch-action: manipulation">
+    <div class="flex-row text-center">
+      <!-- INSTRUCTIONS -->
+      <div class="instructions-container">
+        <!-- HEADER -->
+        <header class="title">
+          <h1>Snake</h1>
+        </header>
+
+        <!-- STATE BUTTON -->
+        <button id="stateButton" onclick="startGame()">Play!</button>
+
+        <!-- DIFFICULTY -->
+        <div class="difficulty">
+          <div class="difficulty-text">
+            <span style="float: left">Difficulty:</span>
+            <span style="float: right"><strong id="difficultyOutput">Normal</strong></span>
+          </div>
+
+          <div class="slidecontainer">
+            <input type="range" min="1" max="3" value="1" class="slider" id="difficultySlider" />
+          </div>
+        </div>
+
+        <!-- INFO -->
+        <div class="info">
+          <p>
+            Press spacebar to pause.
+            <br />
+            Move by pressing the below arrows
+            <br />
+            or using your keyboard arrow keys!
+          </p>
+        </div>
+
+        <!-- KEY PAD -->
+        <table class="keypad">
+          <tbody>
+            <tr>
+              <td style="background-color: white; cursor: default; border: none"></td>
+              <td id="uparrow">&#x21e7;</td>
+              <td style="background-color: white; cursor: default; border: none"></td>
+            </tr>
+            <tr>
+              <td id="leftarrow">&#x21e6;</td>
+              <td id="downarrow">&#x21e9;</td>
+              <td id="rightarrow">&#x21e8;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- GAME -->
+      <div class="game-container">
+        <canvas id="board"></canvas>
+        <div class="scoreboard" class="text-center">Apples Eaten: <span id="scoreOutput">0 </span></div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="main.js"></script>
+  </body>
+</html>

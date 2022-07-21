@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title id="index">Adam Coscia &mdash; Platformer</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="author" content="Adam Coscia" />
+    <meta
+      name="description"
+      content="I am a human-centered computing PhD student at Georgia Tech studying visual analytics and human-computer interaction."
+    />
+    <meta
+      name="keywords"
+      content="phd,visual analytics,georgia tech,interactive computing,sensemaking,information visualization,infovis,infoviz,data science,machine learning,semantic interaction,data manipulation,cognitive bias"
+    />
+    <link rel="manifest" href="/assets/favicon/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/styles/fun.css" />
+    <style>
+      #board {
+        margin: auto;
+        display: block;
+      }
+      .header {
+        font-family: "Press Start 2P", cursive;
+      }
+      .info {
+        font-family: "Quicksand";
+      }
+      .difficulty {
+        font-family: "Quicksand";
+      }
+      #difficultyOutput {
+        font-family: "Press Start 2P", cursive;
+        font-weight: 600;
+      }
+      .slidecontainer {
+        width: 100%; /* Width of the outside container */
+        margin-block-end: 0.5em;
+      }
+      /* The slider itself */
+      .slider {
+        -webkit-appearance: none; /* Override default CSS styles */
+        appearance: none;
+        width: 100%; /* Full-width */
+        height: 25px; /* Specified height */
+        background: #d3d3d3; /* Grey background */
+        outline: none; /* Remove outline */
+        opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+        -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+        transition: opacity 0.2s;
+      }
+      /* Mouse-over effects */
+      .slider:hover {
+        opacity: 1; /* Fully shown on mouse-over */
+      }
+      /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        width: 25px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #4caf50; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+      .slider::-moz-range-thumb {
+        width: 25px; /* Set a specific slider handle width */
+        height: 25px; /* Slider handle height */
+        background: #4caf50; /* Green background */
+        cursor: pointer; /* Cursor on hover */
+      }
+      .stateButtons {
+        width: 100%;
+        margin-block-end: 1em;
+      }
+      .stateButtons td button {
+        font-family: "Press Start 2P", cursive;
+      }
+      .scoreboard {
+        width: 100%;
+        margin-block-start: 1em;
+      }
+      .scoreboard td {
+        font-family: "Press Start 2P", cursive;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="jumbotron jumbotron-fluid" style="overflow: auto">
+        <!-- Header -->
+        <h1 class="display-3 text-center">Basic Platformer</h1>
+        <!-- Instructions -->
+        <p class="lead text-center">Move, Jump, and Fall to reach the goal.</p>
+        <!-- Start button -->
+        <div class="col text-center">
+          <button id="playbutton" class="btn btn-primary float-center" type="submit" onclick="main()">Play!</button>
+        </div>
+        <!-- Game Board -->
+        <div class="row mt-3 mx-auto justify-content-center">
+          <div id="board" class="col text-center"></div>
+        </div>
+        <!-- Player Stats -->
+        <div id="stats" class="row mt-2 mx-5 justify-content-center"></div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="resources/js/main.js"></script>
+  </body>
+</html>
